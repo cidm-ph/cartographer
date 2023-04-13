@@ -10,8 +10,9 @@ cartographer_global <- new.env(parent = emptyenv())
 #' useful for larger datasets, so that they are not loaded into memory until
 #' they are accessed.
 #'
-#' @param feature_type Name of the type. Should include the package name to
-#'   avoid clashes if registered in a package.
+#' @param feature_type Name of the type. If registering from within a package,
+#'   the suggested format is \code{"<package name>.<map name>"} to avoid clashes
+#'   between packages.
 #' @param data A simple feature data frame with the map data, or a function
 #'   that returns a data frame. When \code{lazy} is \code{TRUE}, the function
 #'   will not be called until the data is first accessed.
@@ -28,10 +29,16 @@ cartographer_global <- new.env(parent = emptyenv())
 #' @export
 #'
 #' @examples
-#' register_map(
-#'   "sf.nc",
-#'   function() sf::st_read(system.file("shape/nc.shp", package = "sf")),
-#'   feature_column = "NAME")
+#' # in R/zzz.R
+#' .onLoad <- function(libname, pkgname) {
+#'    cartographer::register_map(
+#'      "sf.nc",
+#'      data = function () {
+#'        sf::st_read(system.file("shape/nc.shp", package = "sf"))
+#'      },
+#'      feature_column = "NAME"
+#'    )
+#' }
 register_map <- function(feature_type, data, feature_column,
                          aliases = NULL, outline = NULL, lazy = TRUE) {
   if (is.null(aliases)) aliases <- character(0)
@@ -72,10 +79,12 @@ validate_map_data <- function(data, feature_column) {
 #'
 #' Each feature type corresponds to map data that has been registered.
 #'
-#' @seealso register_map
+#' @seealso [register_map()]
 #'
 #' @returns Character vector of registered feature types.
 #' @export
+#' @examples
+#' feature_types()
 feature_types <- function() {
   names(cartographer_global)
 }
@@ -93,9 +102,9 @@ feature_types <- function() {
 #'   3. case insensitive match, then
 #'   4. case insensitive match using aliases.
 #'
-#' @seealso register_map
+#' @seealso [register_map()]
 #'
-#' @param feature_type Type of map feature. See [feature_types] for a list of
+#' @param feature_type Type of map feature. See [feature_types()] for a list of
 #'   registered types.
 #'
 #' @returns Character vector of feature names.
@@ -124,7 +133,7 @@ get_geom_feature_column <- function(feature_type) {
 
 #' Retrieve map data registered with cartographer.
 #'
-#' @param feature_type Type of map feature. See [feature_types] for a list of
+#' @param feature_type Type of map feature. See [feature_types()] for a list of
 #'   registered types.
 #'
 #' @returns The spatial data frame that was registered under `feature_type`.
@@ -161,16 +170,16 @@ get_outline <- function(feature_type) {
   cfg$outline
 }
 
-#' Guess the feature type if it was missing
-#'
-#' @param feature_type Type of map feature. See [feature_types()] for a list of
-#'   registered types. If \code{NA}, the type is guessed based on the values in
-#'   the data.
-#' @param locations Character vector of location names in the data.
-#' @param context Name of the calling function, for inclusion in error message
-#'   if it's not possible to unambiguously guess the feature type.
-#'
-#' @usage NULL
+# Guess the feature type if it was missing
+#
+# @param feature_type Type of map feature. See [feature_types()] for a list of
+#   registered types. If \code{NA}, the type is guessed based on the values in
+#   the data.
+# @param locations Character vector of feature names in the data.
+# @param context Name of the calling function, for inclusion in error message
+#   if it's not possible to unambiguously guess the feature type.
+#
+# @usage NULL
 resolve_feature_type <- function (feature_type, locations, context) {
   if (is.null(feature_type)) return(NULL)
   if (is.na(feature_type)) feature_type <- guess_feature_type(locations)

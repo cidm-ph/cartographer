@@ -6,12 +6,20 @@
 \alias{cartographer-package}
 \title{Turn Place Names into Map Data}
 \description{
-\code{{cartographer}} is a framework for easily matching spatial data when
+Cartographer is a framework for easily matching spatial data when
 you have a list of standardised place names. You might have a data frame
 that came from a spreadsheet tracking some data by suburb or state. This
 package can convert it into a spatial data frame ready for plotting. The
 actual map data is provided by other packages (or your own code) that
-register the data with \code{{cartographer}}.
+register the data with cartographer.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/cidm-ph/cartographer}
+  \item Report bugs at \url{https://github.com/cidm-ph/cartographer/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Carl Suster \email{Carl.Suster@health.nsw.gov.au} (\href{https://orcid.org/0000-0001-7021-9380}{ORCID})

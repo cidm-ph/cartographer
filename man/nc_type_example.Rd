@@ -7,8 +7,8 @@
 \format{
 A data frame with 50 rows and 2 columns:
 \describe{
-\item{location}{Location names that match the NAME field of the nc dataset}
-\item{type}{Arbitrary field to map to colour/fill aesthetics}
+\item{county}{Feature names that match the NAME field of the nc dataset}
+\item{type}{Arbitrary categorical data}
 }
 }
 \usage{

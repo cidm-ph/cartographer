@@ -7,7 +7,7 @@
 feature_names(feature_type)
 }
 \arguments{
-\item{feature_type}{Type of map feature. See \link{feature_types} for a list of
+\item{feature_type}{Type of map feature. See \code{\link[=feature_types]{feature_types()}} for a list of
 registered types.}
 }
 \value{
@@ -32,5 +32,5 @@ the names are resolved by checking for the first match using:
 feature_names("sf.nc")
 }
 \seealso{
-register_map
+\code{\link[=register_map]{register_map()}}
 }

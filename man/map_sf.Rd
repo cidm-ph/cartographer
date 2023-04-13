@@ -7,7 +7,7 @@
 map_sf(feature_type)
 }
 \arguments{
-\item{feature_type}{Type of map feature. See \link{feature_types} for a list of
+\item{feature_type}{Type of map feature. See \code{\link[=feature_types]{feature_types()}} for a list of
 registered types.}
 }
 \value{

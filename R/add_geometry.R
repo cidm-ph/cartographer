@@ -1,9 +1,9 @@
 #' Convert input data frame into a spatial data frame
 #'
-#' @param x Data frame with a location column.
-#' @param location Name of the location column (tidy evaluation).
-#' @param feature_type Feature type of the location column. If NA (the default),
-#'   the type is guessed from the values in the location column.
+#' @param x Data frame with a feature name column.
+#' @param location Feature names (tidy evaluation).
+#' @param feature_type The registered map corresponding to values in \code{location}.
+#'   If NA (the default), the type is guessed from the values in \code{location}.
 #' @param geom_name Name for the new column to contain the geometry.
 #'
 #' @returns A spatial data frame containing all of the columns from the input
@@ -15,7 +15,7 @@
 #' @examples
 #' data(nc_type_example)
 #'
-#' automap(nc_type_example, location)
+#' add_geometry(nc_type_example[1:49,], county)
 add_geometry <- function(x, location, feature_type = NA, geom_name = "geometry") {
   if (missing(location))
     cli::cli_abort("{.arg location} is absent but must be supplied.")

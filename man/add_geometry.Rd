@@ -7,12 +7,12 @@
 add_geometry(x, location, feature_type = NA, geom_name = "geometry")
 }
 \arguments{
-\item{x}{Data frame with a location column.}
+\item{x}{Data frame with a feature name column.}
 
-\item{location}{Name of the location column (tidy evaluation).}
+\item{location}{Feature names (tidy evaluation).}
 
-\item{feature_type}{Feature type of the location column. If NA (the default),
-the type is guessed from the values in the location column.}
+\item{feature_type}{The registered map corresponding to values in \code{location}.
+If NA (the default), the type is guessed from the values in \code{location}.}
 
 \item{geom_name}{Name for the new column to contain the geometry.}
 }
@@ -26,5 +26,5 @@ Convert input data frame into a spatial data frame
 \examples{
 data(nc_type_example)
 
-automap(nc_type_example, location)
+add_geometry(nc_type_example[1:49,], county)
 }

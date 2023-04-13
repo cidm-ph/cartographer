@@ -12,6 +12,9 @@ Character vector of registered feature types.
 \description{
 Each feature type corresponds to map data that has been registered.
 }
+\examples{
+feature_types()
+}
 \seealso{
-register_map
+\code{\link[=register_map]{register_map()}}
 }

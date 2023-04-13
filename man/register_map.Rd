@@ -14,8 +14,9 @@ register_map(
 )
 }
 \arguments{
-\item{feature_type}{Name of the type. Should include the package name to
-avoid clashes if registered in a package.}
+\item{feature_type}{Name of the type. If registering from within a package,
+the suggested format is \code{"<package name>.<map name>"} to avoid clashes
+between packages.}
 
 \item{data}{A simple feature data frame with the map data, or a function
 that returns a data frame. When \code{lazy} is \code{TRUE}, the function
@@ -47,8 +48,14 @@ useful for larger datasets, so that they are not loaded into memory until
 they are accessed.
 }
 \examples{
-register_map(
-  "sf.nc",
-  function() sf::st_read(system.file("shape/nc.shp", package = "sf")),
-  feature_column = "NAME")
+# in R/zzz.R
+.onLoad <- function(libname, pkgname) {
+   cartographer::register_map(
+     "sf.nc",
+     data = function () {
+       sf::st_read(system.file("shape/nc.shp", package = "sf"))
+     },
+     feature_column = "NAME"
+   )
+}
 }
