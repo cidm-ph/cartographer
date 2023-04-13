@@ -1,0 +1,34 @@
+Package: cartographer
+Title: Turn Place Names into Map Data
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Carl",
+             family = "Suster",
+             email = "Carl.Suster@health.nsw.gov.au",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0001-7021-9380")),
+      person("Western Sydney Local Health District, NSW Health",
+             role = "cph"))
+Description: 'cartographer' is a framework for easily matching spatial data when
+    you have a list of standardised place names. You might have a data frame
+    that came from a spreadsheet tracking some data by suburb or state. This
+    package can convert it into a spatial data frame ready for plotting. The
+    actual map data is provided by other packages (or your own code) that
+    register the data with 'cartographer'.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    cli,
+    sf
+Collate: 
+    'cartographer-global.R'
+    'aaa.R'
+    'add_geometry.R'
+    'cartographer-package.R'
+    'data.R'
+    'zzz.R'
+Depends: 
+    R (>= 2.10)
+LazyData: true
