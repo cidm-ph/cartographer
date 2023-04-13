@@ -122,14 +122,24 @@ get_geom_feature_column <- function(feature_type) {
   cfg$feature_column
 }
 
-get_geometry <- function(feature_type) {
+#' Retrieve map data registered with cartographer.
+#'
+#' @param feature_type Type of map feature. See [feature_types] for a list of
+#'   registered types.
+#'
+#' @returns The spatial data frame that was registered under `feature_type`.
+#' @export
+#'
+#' @examples
+#' map_sf("sf.nc")
+map_sf <- function(feature_type) {
   cfg <- cartographer_global[[feature_type]]
   if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
   cfg$data
 }
 
 get_geometry_loc <- function(feature_type, location) {
-  geoms <- get_geometry(feature_type)
+  geoms <- map_sf(feature_type)
   geom_locations <- get_geom_feature_column(feature_type)
   geom_locations <- unlist(unclass(geoms)[geom_locations])
 

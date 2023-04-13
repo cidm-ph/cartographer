@@ -3,5 +3,6 @@
 export(add_geometry)
 export(feature_names)
 export(feature_types)
+export(map_sf)
 export(register_map)
 importFrom(rlang,":=")
