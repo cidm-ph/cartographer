@@ -21,8 +21,7 @@ add_geometry <- function(x, location, feature_type = NA, geom_name = "geometry")
     cli::cli_abort("{.arg location} is absent but must be supplied.")
 
   location_data <- dplyr::pull(x, {{ location }})
-  feature_type <- resolve_feature_type(feature_type, location_data,
-                                       context = "{.fn automap}")
+  feature_type <- resolve_feature_type(feature_type, location_data)
   location_data <- resolve_feature_names(location_data, feature_type)
 
   matches <- match(location_data, get_feature_names(feature_type))

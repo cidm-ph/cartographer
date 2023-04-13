@@ -95,14 +95,7 @@ feature_types <- function() {
 #' The list includes any aliases defined when the map was registered. Note that
 #' the \code{location} column matching is case insensitive (see Details below).
 #'
-#' When matching your data's \code{location} aesthetic column to the map data,
-#' the names are resolved by checking for the first match using:
-#'   1. case sensitive match, then
-#'   2. case sensitive match using aliases, then
-#'   3. case insensitive match, then
-#'   4. case insensitive match using aliases.
-#'
-#' @seealso [register_map()]
+#' @seealso [register_map()] and [resolve_feature_names()]
 #'
 #' @param feature_type Type of map feature. See [feature_types()] for a list of
 #'   registered types.
@@ -115,7 +108,7 @@ feature_types <- function() {
 feature_names <- function(feature_type) {
   if (is.na(feature_type)) cli::cli_abort("Must specify a {.arg feature_type}")
   names <- get_feature_names(feature_type)
-  aliases <- get_aliases(feature_type)
+  aliases <- map_aliases(feature_type)
   c(names, unname(aliases))
 }
 
@@ -147,117 +140,36 @@ map_sf <- function(feature_type) {
   cfg$data
 }
 
-get_geometry_loc <- function(feature_type, location) {
+get_geometry_loc <- function(feature_type, feature_name) {
   geoms <- map_sf(feature_type)
   geom_locations <- get_geom_feature_column(feature_type)
   geom_locations <- unlist(unclass(geoms)[geom_locations])
 
-  if (!(location %in% geom_locations)) {
-    cli::cli_abort("Location {location} is not a known {feature_type} feature")
+  if (!(feature_name %in% geom_locations)) {
+    cli::cli_abort("Location {feature_name} is not a known {feature_type} feature")
   }
-  sf::st_geometry(geoms[geom_locations == location,][1,])
+  sf::st_geometry(geoms[geom_locations == feature_name,][1,])
 }
 
-get_aliases <- function(feature_type) {
+map_aliases <- function(feature_type) {
   cfg <- cartographer_global[[feature_type]]
   if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
   cfg$aliases
 }
 
-get_outline <- function(feature_type) {
+#' Retrieve a map outline registered with cartographer.
+#'
+#' @param feature_type Type of map feature. See [feature_types()] for a list of
+#'   registered types.
+#'
+#' @returns The map outline that was registered under `feature_type`. Note that
+#'   the outline is optional, so this will return `NULL` if none was registered.
+#' @export
+#'
+#' @examples
+#' map_outline("sf.nc")
+map_outline <- function(feature_type) {
   cfg <- cartographer_global[[feature_type]]
   if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
   cfg$outline
-}
-
-# Guess the feature type if it was missing
-#
-# @param feature_type Type of map feature. See [feature_types()] for a list of
-#   registered types. If \code{NA}, the type is guessed based on the values in
-#   the data.
-# @param locations Character vector of feature names in the data.
-# @param context Name of the calling function, for inclusion in error message
-#   if it's not possible to unambiguously guess the feature type.
-#
-# @usage NULL
-resolve_feature_type <- function (feature_type, locations, context) {
-  if (is.null(feature_type)) return(NULL)
-  if (is.na(feature_type)) feature_type <- guess_feature_type(locations)
-
-  if (is.null(feature_type) || is.na(feature_type)) {
-    cli::cli_abort("{.arg feature_type} must be provided for {.fn {context}}")
-  }
-  types <- feature_types()
-  if (!(feature_type %in% types)) {
-    cli::cli_abort(c(
-      paste0("Unknown {.arg feature_type} {.val ", feature_type, "}"),
-      i = "Expected one of {types}"
-    ))
-  }
-
-  feature_type
-}
-
-resolve_feature_names <- function(locations, feature_type) {
-  feature_names <- get_feature_names(feature_type)
-  aliases <- get_aliases(feature_type)
-  matches <- match_feature_names(locations, feature_names, aliases)
-
-  unknown_features <- locations[is.na(matches)]
-  if (length(unknown_features) > 0) {
-    cli::cli_abort(c(
-      paste0("{.field location} contains unexpected values"),
-      "x" = "The unknown values are {unknown_features}.",
-      "i" = "Expected {feature_type} names like {head(feature_names, n = 3)}.",
-      "i" = "See feature_names('{feature_type}') for the full list."
-    ))
-  }
-
-  feature_names[matches]
-}
-
-match_feature_names <- function(locations, feature_names, aliases) {
-  if (length(locations) == 0) return(integer(0))
-
-  mapply(
-    function(...) {
-      m <- c(...)
-      m <- as.integer(m[!is.na(m)])
-      if (length(m) > 0) m[[1]] else NA_integer_
-    },
-    match(locations, feature_names),
-    match(aliases[locations], feature_names),
-    match(tolower(locations), tolower(feature_names)),
-    match(stats::setNames(aliases, tolower(names(aliases)))[tolower(locations)],
-          feature_names),
-    match(stats::setNames(tolower(aliases), tolower(names(aliases)))[tolower(locations)],
-          tolower(feature_names))
-  )
-}
-
-# FIXME this approach is forcing _all_ of the lazy loaded datasets
-guess_feature_type <- function (locations) {
-  locations <- unique(locations)
-  types <- feature_types()
-
-  found <- sapply(types, function (ty) {
-    feature_names <- get_feature_names(ty)
-    aliases <- get_aliases(ty)
-    matches <- match_feature_names(locations, feature_names, aliases)
-    sum(!is.na(matches))
-  })
-
-  if (length(locations) == 0) {
-    cli::cli_abort(c("Unable to guess {.arg feature_type} from locations",
-                     "x" = "{.field location} is empty",
-                     "i" = "Specify {.arg feature_type} explicitly"))
-  } else if (all(found == 0)) {
-    cli::cli_abort(c("Unable to guess {.arg feature_type} from locations",
-                     "x" = "These locations are not in any list of features: {head(locations, n = 3)}"))
-  } else if (sum(found == max(found)) > 1) {
-    cli::cli_abort(c("Unable to guess {.arg feature_type} from locations",
-                     "x" = "The locations match multiple feature types: {names(found[found == max(found)])}",
-                     "i" = "Specify {.arg feature_type} explicitly"))
-  }
-  names(found[which.max(found)])
 }

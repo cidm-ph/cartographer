@@ -18,19 +18,9 @@ This gives the list of feature names that are part of the specified map data.
 The list includes any aliases defined when the map was registered. Note that
 the \code{location} column matching is case insensitive (see Details below).
 }
-\details{
-When matching your data's \code{location} aesthetic column to the map data,
-the names are resolved by checking for the first match using:
-\enumerate{
-\item case sensitive match, then
-\item case sensitive match using aliases, then
-\item case insensitive match, then
-\item case insensitive match using aliases.
-}
-}
 \examples{
 feature_names("sf.nc")
 }
 \seealso{
-\code{\link[=register_map]{register_map()}}
+\code{\link[=register_map]{register_map()}} and \code{\link[=resolve_feature_names]{resolve_feature_names()}}
 }

@@ -30,6 +30,7 @@ Collate:
     'add_geometry.R'
     'cartographer-package.R'
     'data.R'
+    'resolve.R'
     'zzz.R'
 Depends: 
     R (>= 4.2)
