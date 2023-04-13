@@ -106,22 +106,16 @@ feature_types <- function() {
 #' @examples
 #' feature_names("sf.nc")
 feature_names <- function(feature_type) {
-  if (is.na(feature_type)) cli::cli_abort("Must specify a {.arg feature_type}")
   names <- get_feature_names(feature_type)
   aliases <- map_aliases(feature_type)
   c(names, unname(aliases))
 }
 
 get_feature_names <- function(feature_type) {
+  if (missing(feature_type) || is.na(feature_type)) cli::cli_abort("Must specify a {.arg feature_type}")
   cfg <- cartographer_global[[feature_type]]
   if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
   cfg$data[[cfg$feature_column]]
-}
-
-get_geom_feature_column <- function(feature_type) {
-  cfg <- cartographer_global[[feature_type]]
-  if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
-  cfg$feature_column
 }
 
 #' Retrieve map data registered with cartographer.
@@ -140,15 +134,30 @@ map_sf <- function(feature_type) {
   cfg$data
 }
 
-get_geometry_loc <- function(feature_type, feature_name) {
+#' Retrieve geometry of a single location.
+#'
+#' @param feature_names Name of the feature(s) to retrieve. This must be an exact
+#'   case-sensitive match, and aliases are not consulted.
+#' @param feature_type Type of map feature. See [feature_types()] for a list of
+#'   registered types.
+#'
+#' @returns The geometry as a `sfc` object.
+#' @export
+#'
+#' @examples
+#' map_sfc("Ashe", "sf.nc")
+#' map_sfc(c("Craven", "Buncombe"), "sf.nc")
+map_sfc <- function(feature_names, feature_type) {
   geoms <- map_sf(feature_type)
-  geom_locations <- get_geom_feature_column(feature_type)
-  geom_locations <- unlist(unclass(geoms)[geom_locations])
+  registered_names <- get_feature_names(feature_type)
+  matches <- match(feature_names, registered_names)
 
-  if (!(feature_name %in% geom_locations)) {
-    cli::cli_abort("Location {feature_name} is not a known {feature_type} feature")
+  if (any(is.na(matches))) {
+    unmatched <- feature_names[is.na(matches)]
+    cli::cli_abort(c("Feature names are not all present in the data registered for {feature_type}",
+                     "i" = "These are missing: {head(unmatched, n = 3)}"))
   }
-  sf::st_geometry(geoms[geom_locations == feature_name,][1,])
+  sf::st_geometry(geoms[matches,])
 }
 
 map_aliases <- function(feature_type) {
