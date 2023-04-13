@@ -17,6 +17,7 @@ register the data with cartographer.
 Useful links:
 \itemize{
   \item \url{https://github.com/cidm-ph/cartographer}
+  \item \url{https://cidm-ph.github.io/cartographer/}
   \item Report bugs at \url{https://github.com/cidm-ph/cartographer/issues}
 }
 
