@@ -31,6 +31,9 @@
     <loc>https://cidm-ph.github.io/cartographer/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://cidm-ph.github.io/cartographer/reference/map_outline.html</loc>
+  </url>
+  <url>
     <loc>https://cidm-ph.github.io/cartographer/reference/map_sf.html</loc>
   </url>
   <url>
@@ -38,5 +41,11 @@
   </url>
   <url>
     <loc>https://cidm-ph.github.io/cartographer/reference/register_map.html</loc>
+  </url>
+  <url>
+    <loc>https://cidm-ph.github.io/cartographer/reference/resolve_feature_names.html</loc>
+  </url>
+  <url>
+    <loc>https://cidm-ph.github.io/cartographer/reference/resolve_feature_type.html</loc>
   </url>
 </urlset>
