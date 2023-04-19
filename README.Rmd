@@ -48,6 +48,7 @@ Alternatively, you can either register your own data using `register_map()`.
 
 Cartographer comes with one example dataset registered (the map of North Carolina
 provided by the `{sf}` package where the feature names correspond to counties).
+If you install the `{maps}` package there are some additional maps registered.
 
 ```{r}
 library(cartographer)

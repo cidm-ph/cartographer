@@ -1,6 +1,6 @@
 Package: cartographer
 Title: Turn Place Names into Map Data
-Version: 0.1.2
+Version: 0.1.2.9000
 Authors@R: 
     c(person(given = "Carl",
              family = "Suster",
@@ -35,7 +35,8 @@ Depends:
     R (>= 4.2)
 LazyData: true
 Suggests: 
-    ggplot2 (>= 3.4.2)
+    ggplot2 (>= 3.4.2),
+    maps
 URL: https://github.com/cidm-ph/cartographer,
     https://cidm-ph.github.io/cartographer/
 BugReports: https://github.com/cidm-ph/cartographer/issues
