@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="index.html">cartographer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +111,7 @@
 <span><span class="co">#&gt; [6] "Hertford"</span></span></code></pre></div>
 <p>Our example dataset has a column called <code>county</code> with the name of the county and a column <code>type</code> that is one of two values. We’d like to draw a map that shows us where the entries are by type.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nc_type_example</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nc_type_example_1</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    county type</span></span>
 <span><span class="co">#&gt; 1  BERTIE    B</span></span>
 <span><span class="co">#&gt; 2  BERTIE    A</span></span>
@@ -121,7 +121,7 @@
 <span><span class="co">#&gt; 6 PAMLICO    B</span></span></code></pre></div>
 <p>We want to convert our data frame into a spatial data frame, then we’ll be able to use standard <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> tools to draw our map. Cartographer just needs to know which of its maps we’re using (<code>"sf.nc"</code>, although it’s able to guess that if we don’t specify it), and which column has the feature names (<code>county</code>):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">nc_type_example</span>, <span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">nc_type_example_1</span>, <span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in `resolve_feature_names()`:</span></span>
 <span><span class="co">#&gt; ! location contains unexpected values</span></span>
 <span><span class="co">#&gt; ✖ The unknown values are PAMILCO.</span></span>
@@ -132,11 +132,11 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># cleaned dataset</span></span>
-<span><span class="va">nc_type_example2</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">nc_type_example</span> <span class="op">|&gt;</span></span>
+<span><span class="va">nc_type_example_1_fixed</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">nc_type_example_1</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>county <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span><span class="va">county</span>, <span class="st">"PAMILCO"</span> <span class="op">~</span> <span class="st">"PAMLICO"</span>, .default <span class="op">=</span> <span class="va">county</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">nc_type_example2</span>, <span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">nc_type_example_1_fixed</span>, <span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Simple feature collection with 50 features and 2 fields</span></span>
 <span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">#&gt; Dimension:     XY</span></span>
@@ -158,7 +158,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nc_type_example2</span> <span class="op">|&gt;</span></span>
+<span><span class="va">nc_type_example_1_fixed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">county</span>, <span class="va">type</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>

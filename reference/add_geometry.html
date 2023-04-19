@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">cartographer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,26 +80,24 @@ data frame.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">nc_type_example</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">add_geometry</span><span class="op">(</span><span class="va">nc_type_example</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">49</span>,<span class="op">]</span>, <span class="va">county</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 49 features and 2 fields</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">add_geometry</span><span class="op">(</span><span class="va">nc_type_example_2</span>, <span class="va">county</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 200 features and 2 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -82.07776 ymin: 34.98222 xmax: -76.50713 ymax: 36.55629</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -82.74389 ymin: 35.14903 xmax: -76.69376 ymax: 36.24614</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> First 10 features:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         county type                       geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       BERTIE    B MULTIPOLYGON (((-76.78307 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       BERTIE    A MULTIPOLYGON (((-76.78307 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       BERTIE    A MULTIPOLYGON (((-76.78307 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5       WARREN    B MULTIPOLYGON (((-78.30876 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6      PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  NORTHAMPTON    B MULTIPOLYGON (((-77.21767 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8      PAMLICO    A MULTIPOLYGON (((-76.94324 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9      PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10     PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       county type                       geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     MARTIN    A MULTIPOLYGON (((-77.17846 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   ALAMANCE    B MULTIPOLYGON (((-79.24619 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     BERTIE    A MULTIPOLYGON (((-76.78307 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    CHATHAM    B MULTIPOLYGON (((-79.55536 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    CHATHAM    B MULTIPOLYGON (((-79.55536 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  HENDERSON    B MULTIPOLYGON (((-82.57003 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     GASTON    B MULTIPOLYGON (((-81.32282 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     GASTON    B MULTIPOLYGON (((-81.32282 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    LINCOLN    B MULTIPOLYGON (((-80.95677 3...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 HENDERSON    A MULTIPOLYGON (((-82.57003 3...</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
