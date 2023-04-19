@@ -108,7 +108,7 @@ feature_types <- function() {
 feature_names <- function(feature_type) {
   names <- get_feature_names(feature_type)
   aliases <- map_aliases(feature_type)
-  c(names, unname(aliases))
+  c(names, names(aliases))
 }
 
 get_feature_names <- function(feature_type) {

@@ -1,6 +1,6 @@
 Package: cartographer
 Title: Turn Place Names into Map Data
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     c(person(given = "Carl",
              family = "Suster",
