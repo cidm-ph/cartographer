@@ -50,7 +50,7 @@ resolve_feature_type <- function (feature_type, feature_names) {
 #' @param feature_names Character vector of feature names in the data.
 #' @param feature_type Type of map feature. See [feature_types()] for a list of
 #'   registered types.
-#'  @param unmatched Controls behaviour when `feature_names` contains values
+#' @param unmatched Controls behaviour when `feature_names` contains values
 #'   that do not match registered feature names. Possible values are
 #'   `"error"` to throw an error or
 #'   `"pass"` to return the original values unaltered.

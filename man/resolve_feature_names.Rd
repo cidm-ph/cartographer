@@ -14,8 +14,9 @@ resolve_feature_names(
 \item{feature_names}{Character vector of feature names in the data.}
 
 \item{feature_type}{Type of map feature. See \code{\link[=feature_types]{feature_types()}} for a list of
-registered types.
-@param unmatched Controls behaviour when \code{feature_names} contains values
+registered types.}
+
+\item{unmatched}{Controls behaviour when \code{feature_names} contains values
 that do not match registered feature names. Possible values are
 \code{"error"} to throw an error or
 \code{"pass"} to return the original values unaltered.}
