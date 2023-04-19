@@ -26,9 +26,8 @@ Imports:
     sf (>= 1.0.12)
 Collate: 
     'cartographer-global.R'
-    'aaa.R'
-    'add_geometry.R'
     'cartographer-package.R'
+    'add_geometry.R'
     'data.R'
     'resolve.R'
     'zzz.R'
