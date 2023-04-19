@@ -13,9 +13,7 @@
 #' @export
 #'
 #' @examples
-#' data(nc_type_example)
-#'
-#' add_geometry(nc_type_example[1:49,], county)
+#' add_geometry(nc_type_example_2, county)
 add_geometry <- function(x, location, feature_type = NA, geom_name = "geometry") {
   if (missing(location))
     cli::cli_abort("{.arg location} is absent but must be supplied.")

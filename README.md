@@ -58,7 +58,7 @@ county and a column `type` that is one of two values. We’d like to draw
 a map that shows us where the entries are by type.
 
 ``` r
-head(nc_type_example)
+head(nc_type_example_1)
 #>    county type
 #> 1  BERTIE    B
 #> 2  BERTIE    A
@@ -75,7 +75,7 @@ it’s able to guess that if we don’t specify it), and which column has
 the feature names (`county`):
 
 ``` r
-add_geometry(nc_type_example, county, feature_type = "sf.nc")
+add_geometry(nc_type_example_1, county, feature_type = "sf.nc")
 #> Error in `resolve_feature_names()`:
 #> ! location contains unexpected values
 #> ✖ The unknown values are PAMILCO.
@@ -92,11 +92,11 @@ column.
 library(dplyr, warn.conflicts = FALSE)
 
 # cleaned dataset
-nc_type_example2 <-
-  nc_type_example |>
+nc_type_example_1_fixed <-
+  nc_type_example_1 |>
   mutate(county = case_match(county, "PAMILCO" ~ "PAMLICO", .default = county))
 
-add_geometry(nc_type_example2, county, feature_type = "sf.nc")
+add_geometry(nc_type_example_1_fixed, county, feature_type = "sf.nc")
 #> Simple feature collection with 50 features and 2 fields
 #> Geometry type: MULTIPOLYGON
 #> Dimension:     XY
@@ -123,7 +123,7 @@ base map:
 ``` r
 library(ggplot2)
 
-nc_type_example2 |>
+nc_type_example_1_fixed |>
   count(county, type) |>
   add_geometry(county, feature_type = "sf.nc") |>
   ggplot() +

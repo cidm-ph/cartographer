@@ -24,7 +24,5 @@ data frame.
 Convert input data frame into a spatial data frame
 }
 \examples{
-data(nc_type_example)
-
-add_geometry(nc_type_example[1:49,], county)
+add_geometry(nc_type_example_2, county)
 }
