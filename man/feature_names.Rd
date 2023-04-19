@@ -19,7 +19,7 @@ The list includes any aliases defined when the map was registered. Note that
 the \code{location} column matching is case insensitive (see Details below).
 }
 \examples{
-feature_names("sf.nc")
+head(feature_names("sf.nc"))
 }
 \seealso{
 \code{\link[=register_map]{register_map()}} and \code{\link[=resolve_feature_names]{resolve_feature_names()}}

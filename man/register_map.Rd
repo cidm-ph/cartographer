@@ -51,7 +51,7 @@ they are accessed.
 # in R/zzz.R
 .onLoad <- function(libname, pkgname) {
    cartographer::register_map(
-     "sf.nc",
+     "sf.nc2",
      data = function () {
        sf::st_read(system.file("shape/nc.shp", package = "sf"))
      },

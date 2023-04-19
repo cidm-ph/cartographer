@@ -32,7 +32,7 @@ cartographer_global <- new.env(parent = emptyenv())
 #' # in R/zzz.R
 #' .onLoad <- function(libname, pkgname) {
 #'    cartographer::register_map(
-#'      "sf.nc",
+#'      "sf.nc2",
 #'      data = function () {
 #'        sf::st_read(system.file("shape/nc.shp", package = "sf"))
 #'      },
@@ -104,7 +104,7 @@ feature_types <- function() {
 #' @export
 #'
 #' @examples
-#' feature_names("sf.nc")
+#' head(feature_names("sf.nc"))
 feature_names <- function(feature_type) {
   names <- get_feature_names(feature_type)
   aliases <- map_aliases(feature_type)
