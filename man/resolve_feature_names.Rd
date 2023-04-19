@@ -4,13 +4,21 @@
 \alias{resolve_feature_names}
 \title{Canonicalise feature names accounting for aliases and character case}
 \usage{
-resolve_feature_names(feature_names, feature_type)
+resolve_feature_names(
+  feature_names,
+  feature_type,
+  unmatched = c("error", "pass")
+)
 }
 \arguments{
 \item{feature_names}{Character vector of feature names in the data.}
 
 \item{feature_type}{Type of map feature. See \code{\link[=feature_types]{feature_types()}} for a list of
-registered types.}
+registered types.
+@param unmatched Controls behaviour when \code{feature_names} contains values
+that do not match registered feature names. Possible values are
+\code{"error"} to throw an error or
+\code{"pass"} to return the original values unaltered.}
 }
 \value{
 Character vector of the canonicalised names.
@@ -26,4 +34,5 @@ Names are resolved by checking for the first match using:
 }
 \examples{
 resolve_feature_names(c("LEE", "ansoN"), feature_type = "sf.nc")
+resolve_feature_names(c("LEE", "ansoNe"), feature_type = "sf.nc", unmatched = "pass")
 }

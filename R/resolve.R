@@ -50,28 +50,40 @@ resolve_feature_type <- function (feature_type, feature_names) {
 #' @param feature_names Character vector of feature names in the data.
 #' @param feature_type Type of map feature. See [feature_types()] for a list of
 #'   registered types.
+#'  @param unmatched Controls behaviour when `feature_names` contains values
+#'   that do not match registered feature names. Possible values are
+#'   `"error"` to throw an error or
+#'   `"pass"` to return the original values unaltered.
 #'
 #' @returns Character vector of the canonicalised names.
 #' @export
 #'
 #' @examples
 #' resolve_feature_names(c("LEE", "ansoN"), feature_type = "sf.nc")
-resolve_feature_names <- function(feature_names, feature_type) {
+#' resolve_feature_names(c("LEE", "ansoNe"), feature_type = "sf.nc", unmatched = "pass")
+resolve_feature_names <- function(feature_names, feature_type,
+                                  unmatched = c("error", "pass")) {
   registered_names <- get_feature_names(feature_type)
   aliases <- map_aliases(feature_type)
   matches <- match_feature_names(feature_names, registered_names, aliases)
 
-  unknown_features <- feature_names[is.na(matches)]
-  if (length(unknown_features) > 0) {
-    cli::cli_abort(c(
-      paste0("{.field location} contains unexpected values"),
-      "x" = "The unknown values are {unknown_features}.",
-      "i" = "Expected {feature_type} names like {head(registered_names, n = 3)}.",
-      "i" = "See feature_names('{feature_type}') for the full list."
-    ))
-  }
-
-  registered_names[matches]
+  unmatched <- match.arg(unmatched)
+  switch(unmatched,
+         error = {
+           unknown_features <- feature_names[is.na(matches)]
+           if (length(unknown_features) > 0) {
+             cli::cli_abort(c(
+               paste0("{.field location} contains unexpected values"),
+               "x" = "The unknown values are {unknown_features}.",
+               "i" = "Expected {feature_type} names like {head(registered_names, n = 3)}.",
+               "i" = "See feature_names('{feature_type}') for the full list."
+             ))
+           }
+           registered_names[matches]
+         },
+         pass = dplyr::if_else(is.na(matches),
+                               feature_names,
+                               registered_names[matches]))
 }
 
 match_feature_names <- function(locations, feature_names, aliases) {
