@@ -89,6 +89,14 @@ feature_types <- function() {
   names(cartographer_global)
 }
 
+is_promise <- function(ftype) {
+  .Call(C_is_promise, as.name(ftype), cartographer_global)
+}
+
+promise_was_forced <- function(ftype) {
+  .Call(C_promise_was_forced, as.name(ftype), cartographer_global)
+}
+
 #' List known feature names
 #'
 #' This gives the list of feature names that are part of the specified map data.

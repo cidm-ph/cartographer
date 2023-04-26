@@ -1,0 +1,2 @@
+PKG_LIBS = "-Wl,-no_fixup_chains"
+PKG_CFLAGS = $(C_VISIBILITY)

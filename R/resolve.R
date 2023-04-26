@@ -105,30 +105,49 @@ match_feature_names <- function(locations, feature_names, aliases) {
   )
 }
 
-# FIXME this approach is forcing _all_ of the lazy loaded datasets
 guess_feature_type <- function (feature_names) {
   feature_names <- unique(feature_names)
-  types <- feature_types()
+  if (length(feature_names) == 0) {
+    cli::cli_abort(c("Unable to guess {.arg feature_type} from the data",
+                     "x" = "{.field feature_names} is empty",
+                     "i" = "Specify {.arg feature_type} explicitly"))
+  }
 
-  found <- sapply(types, function (ty) {
+  types <- feature_types()
+  was_forced <- sapply(types, promise_was_forced)
+
+  # first skip any types that haven't already been lazy loaded
+  found <- sapply(types[was_forced], function (ty) {
     registered_names <- get_feature_names(ty)
     aliases <- map_aliases(ty)
     matches <- match_feature_names(feature_names, registered_names, aliases)
     sum(!is.na(matches))
   })
-
-  if (length(feature_names) == 0) {
-    cli::cli_abort(c("Unable to guess {.arg feature_type} from the data",
-                     "x" = "{.field feature_names} is empty",
-                     "i" = "Specify {.arg feature_type} explicitly"))
-  } else if (all(found == 0)) {
-    cli::cli_abort(c("Unable to guess {.arg feature_type} from the data",
-                     "x" = "These features are not in any registered map: {head(feature_names, n = 3)}"),
-                     "i" = "Register a new map or double check the correct data has been used")
-  } else if (sum(found == max(found)) > 1) {
+  if (any(found != 0)) {
+    if (sum(found == max(found)) > 1) {
     cli::cli_abort(c("Unable to guess {.arg feature_type} from the data",
                      "x" = "The features match multiple registered maps: {names(found[found == max(found)])}",
                      "i" = "Specify {.arg feature_type} explicitly"))
+    }
+    return(names(found[which.max(found)]))
   }
-  names(found[which.max(found)])
+
+  # force loading of maps where this is possible without errors
+  for (ty in types[!was_forced]) {
+    registered_names <- rlang::try_fetch(get_feature_names(ty), error = function(cnd) {
+      cli::cli_inform(c("While guessing {.arg feature_type}, cartographer map '{ty}' was skipped because it could not be loaded",
+                        "i" = "Specify {.arg feature_type} explicitly to avoid this message if '{ty}' was not the map you intended",
+                        "i" = "{cnd}"))
+    })
+    if (is.null(registered_names)) next
+    aliases <- map_aliases(ty)
+    matches <- match_feature_names(feature_names, registered_names, aliases)
+
+    # don't look for the best match: just return the first to avoid loading more packages
+    if (any(!is.na(matches))) return (ty)
+  }
+
+  cli::cli_abort(c("Unable to guess {.arg feature_type} from the data",
+                   "x" = "These features are not in any registered map: {head(feature_names, n = 3)}"),
+                   "i" = "Register a new map or double check the correct data has been used")
 }
