@@ -62,12 +62,12 @@ resolve_feature_type <- function (feature_type, feature_names) {
 #' resolve_feature_names(c("LEE", "ansoN"), feature_type = "sf.nc")
 #' resolve_feature_names(c("LEE", "ansoNe"), feature_type = "sf.nc", unmatched = "pass")
 resolve_feature_names <- function(feature_names, feature_type,
-                                  unmatched = c("error", "pass")) {
+                                  unmatched = "error") {
   registered_names <- get_feature_names(feature_type)
   aliases <- map_aliases(feature_type)
   matches <- match_feature_names(feature_names, registered_names, aliases)
 
-  unmatched <- match.arg(unmatched)
+  unmatched <- rlang::arg_match0(unmatched, c("error", "pass"))
   switch(unmatched,
          error = {
            unknown_features <- feature_names[is.na(matches)]

@@ -4,11 +4,7 @@
 \alias{resolve_feature_names}
 \title{Canonicalise feature names accounting for aliases and character case}
 \usage{
-resolve_feature_names(
-  feature_names,
-  feature_type,
-  unmatched = c("error", "pass")
-)
+resolve_feature_names(feature_names, feature_type, unmatched = "error")
 }
 \arguments{
 \item{feature_names}{Character vector of feature names in the data.}
