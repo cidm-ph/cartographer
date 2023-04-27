@@ -38,14 +38,16 @@ Alternatively, you can either register your own data using
 
 Cartographer comes with one example dataset registered (the map of North
 Carolina provided by the `{sf}` package where the feature names
-correspond to counties).
+correspond to counties). If you install the `{maps}` package, some
+additional maps are available.
 
 ``` r
 library(cartographer)
 
 # list registered datasets
 feature_types()
-#> [1] "sf.nc"
+#> [1] "maps.italy"  "maps.lakes"  "maps.nz"     "maps.world"  "maps.state" 
+#> [6] "sf.nc"       "maps.france"
 
 # list feature names in one of the datasets
 head(feature_names("sf.nc"))
