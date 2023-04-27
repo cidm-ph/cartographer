@@ -97,13 +97,14 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>Cartographer comes with one example dataset registered (the map of North Carolina provided by the <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package where the feature names correspond to counties).</p>
+<p>Cartographer comes with one example dataset registered (the map of North Carolina provided by the <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package where the feature names correspond to counties). If you install the <code>{maps}</code> package, some additional maps are available.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># list registered datasets</span></span>
 <span><span class="fu"><a href="reference/feature_types.html">feature_types</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "sf.nc"</span></span>
+<span><span class="co">#&gt; [1] "maps.italy"  "maps.lakes"  "maps.nz"     "maps.world"  "maps.state" </span></span>
+<span><span class="co">#&gt; [6] "sf.nc"       "maps.france"</span></span>
 <span></span>
 <span><span class="co"># list feature names in one of the datasets</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/feature_names.html">feature_names</a></span><span class="op">(</span><span class="st">"sf.nc"</span><span class="op">)</span><span class="op">)</span></span>
