@@ -26,6 +26,7 @@ cartographer_global <- new.env(parent = emptyenv())
 #'   used.
 #'
 #' @returns No return value; this updates the global feature registry.
+#' @seealso `vignette("registering_maps")`
 #' @export
 #'
 #' @examples

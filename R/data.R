@@ -7,7 +7,7 @@
 #'
 #' @rdname nc_type_example
 #' @format
-#' A data frames with 50 rows and 2 columns:
+#' Objects of class `data.frame` with 50 and 200 rows respectively, and 2 columns:
 #' \describe{
 #'   \item{county}{Feature names that match the NAME field of the nc dataset}
 #'   \item{type}{Arbitrary categorical data}
@@ -15,6 +15,5 @@
 "nc_type_example_1"
 
 #' @rdname nc_type_example
-#' @format
-#' A data frames with 200 rows and 2 columns:
+#' @format NULL
 "nc_type_example_2"

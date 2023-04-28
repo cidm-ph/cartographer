@@ -1,0 +1,79 @@
+---
+title: "Getting started with 'cartographer'"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with 'cartographer'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Cartographer comes with one example dataset registered (the map of North Carolina
+provided by the `{sf}` package where the feature names correspond to counties).
+If you install the `{maps}` package, some additional maps are available.
+
+```{r}
+library(cartographer)
+
+# list registered datasets
+feature_types()
+
+# list feature names in one of the datasets
+head(feature_names("sf.nc"))
+```
+
+Our example dataset has a column called `county` with the name of the county and
+a column `type` that is one of two values. We'd like to draw a map that shows
+us where the entries are by type.
+
+```{r}
+head(nc_type_example_1)
+```
+
+We want to convert our data frame into a spatial data frame, then we'll be able to
+use standard `{ggplot2}` tools to draw our map. Cartographer just needs to know
+which of its maps we're using (`"sf.nc"`, although it's able to guess that if we
+don't specify it), and which column has the feature names (`county`):
+
+```{r, error = TRUE}
+add_geometry(nc_type_example_1, county, feature_type = "sf.nc")
+```
+
+What happened? The matching of county names was case-insensitive, so that wasn't
+the issue; it looks like our data contained a typo. One of the rows contains
+`"PAMILCO"` instead of `"PAMLICO"` in the `county` column.
+
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+
+# cleaned dataset
+nc_type_example_1_fixed <-
+  nc_type_example_1 |>
+  mutate(county = case_match(county, "PAMILCO" ~ "PAMLICO", .default = county))
+
+add_geometry(nc_type_example_1_fixed, county, feature_type = "sf.nc")
+```
+
+Now that we have our spatial geometry added, we can go ahead and plot it, adding
+a layer that uses the full `"sf.nc"` dataset to give us the base map:
+
+```{r example-basic, fig.width=8, fig.height=2}
+library(ggplot2)
+
+nc_type_example_1_fixed |>
+  count(county, type) |>
+  add_geometry(county, feature_type = "sf.nc") |>
+  ggplot() +
+  geom_sf(data = map_sf("sf.nc")) +
+  geom_sf(aes(fill = n)) +
+  facet_wrap(vars(type))
+```
+
+The package `{ggautomap}` uses cartographer to provide some new `{ggplot2}` geoms that
+transparently attach the map data.

@@ -59,3 +59,6 @@ they are accessed.
    )
 }
 }
+\seealso{
+\code{vignette("registering_maps")}
+}

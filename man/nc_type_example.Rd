@@ -6,13 +6,11 @@
 \alias{nc_type_example_2}
 \title{Example datasets with a feature name column and random data}
 \format{
-A data frames with 50 rows and 2 columns:
+Objects of class \code{data.frame} with 50 and 200 rows respectively, and 2 columns:
 \describe{
 \item{county}{Feature names that match the NAME field of the nc dataset}
 \item{type}{Arbitrary categorical data}
 }
-
-A data frames with 200 rows and 2 columns:
 }
 \usage{
 nc_type_example_1

@@ -1,0 +1,105 @@
+---
+title: "Registering map data with 'cartographer'"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Registering map data with 'cartographer'}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cartographer)
+```
+
+
+If you are often working with spatial data concerning a specific region, it might
+make sense to bundle up the map data along with its registration as an R package.
+This is true even if the data is only for internal use.
+
+For a general introduction to R packaging, see [the R packaging book](https://r-pkgs.org/).
+The [chapter on packaging data](https://r-pkgs.org/data.html) in particular contains many
+relevant hints.
+
+
+## General guidelines
+Your source dataset needs to be transformed into a `{sf}` data frame. The `sf::read_sf()`
+can ingest many popular spatial data formats
+Make use of `usethis::use_data_raw()` and `usethis::use_data()` to prepare the data.
+
+Your package will need to inform `{cartographer}` of the data by calling `register_map()`.
+This needs to happen after your package is loaded, so the `.onLoad()` hook is the
+appropriate place:
+
+```{r}
+# in R/zzz.R
+.onLoad <- function(libname, pkgname) {
+   cartographer::register_map(
+     "sf.nc2",
+     data = function () {
+       sf::st_read(system.file("shape/nc.shp", package = "sf"))
+     },
+     feature_column = "NAME"
+   )
+}
+```
+
+The hook needs to come last when your package is evaluated, so the convention is
+to include it in a file called `R/zzz.R`, which is normally alphabetically last.
+The registration should at least include the map data and the name of the column that
+labels the features. It can also contain an alias mapping if there are alternative
+names or abbreviations for places that would plausibly appear in datasets.
+
+
+## Reducing file size
+Spatial datasets can often be quite large as they contain high resolution data.
+This can especially be a problem if attempting to commit the data to git or publish
+your package to CRAN (where 1 MB is the soft limit for the total compressed size of
+packages).
+
+Consider removing extra columns from the spatial dataset so that only the geometry column
+and the name column remain.
+
+A useful pattern to reduce the size is to simplify the geometry to a specified resolution:
+
+```{r, eval=FALSE}
+# Preserve the original coordinate reference system.
+crs_orig <- sf::st_crs(high_res_sf_data_frame)
+
+# Convert to a more suitable CRS for manipulation. Note that the lat_ts argument
+# here is the "latitude of true scale", i.e. the latitude at which scale will be
+# the least distorted. Adjust this based on your data.
+crs_working <- sf::st_crs("+proj=eqc +lat_ts=34 units=m")
+
+# Choose a resolution: features smaller than this scale will be lost.
+tolerance_m <- 1000L
+
+low_res <- high_res_sf_data_frame |>
+  sf::st_transform(crs_working) |>
+  sf::st_simplify(dTolerance = tolerance_m) |>
+  sf::st_transform(crs_orig)
+
+# Compare the size after reducing the resolution:
+object.size(high_res_sf_data_frame)
+object.size(low_res)
+```
+
+See the documentation for the [equidistant cylindrical](https://proj.org/operations/projections/eqc.html)
+projection for details of its configuration.
+
+You may also wish to remove holes in features:
+
+```{r, eval=FALSE}
+new_geom <- geom |>
+  sf::st_transform(crs_working) |>
+  sf::st_union() |>
+  nngeo::st_remove_holes() |>
+  sf::st_make_valid()
+```
+

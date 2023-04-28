@@ -36,7 +36,10 @@ Depends:
 LazyData: true
 Suggests: 
     ggplot2 (>= 3.4.2),
-    maps
+    knitr,
+    maps,
+    rmarkdown
 URL: https://github.com/cidm-ph/cartographer,
     https://cidm-ph.github.io/cartographer/
 BugReports: https://github.com/cidm-ph/cartographer/issues
+VignetteBuilder: knitr
