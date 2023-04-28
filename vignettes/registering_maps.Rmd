@@ -34,7 +34,7 @@ can ingest many popular spatial data formats
 Make use of `usethis::use_data_raw()` and `usethis::use_data()` to prepare the data.
 
 Your package will need to inform `{cartographer}` of the data by calling `register_map()`.
-This needs to happen after your package is loaded, so the `.onLoad()` hook is the
+This needs to happen after your package is loaded, so the `base::.onLoad()` hook is the
 appropriate place:
 
 ```{r}
