@@ -24,8 +24,20 @@ nc_type_example_2 contains correct data."><!-- mathjax --><script src="https://c
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/cartographer.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/registering_maps.html">Registering map data with 'cartographer'</a>
+  </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -64,15 +76,14 @@ contains a deliberate error in the county name for a single row, whereas
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frames with 50 rows and 2 columns:</p><dl><dt>county</dt>
+    <p>Objects of class <code>data.frame</code> with 50 and 200 rows respectively, and 2 columns:</p><dl><dt>county</dt>
 <dd><p>Feature names that match the NAME field of the nc dataset</p></dd>
 
 <dt>type</dt>
 <dd><p>Arbitrary categorical data</p></dd>
 
 
-</dl><p>A data frames with 200 rows and 2 columns:</p>
-    </div>
+</dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

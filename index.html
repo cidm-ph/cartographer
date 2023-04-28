@@ -46,7 +46,19 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
+  <a class="nav-link" href="articles/cartographer.html">Get started</a>
+</li>
+<li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/registering_maps.html">Registering map data with 'cartographer'</a>
+  </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -72,7 +84,13 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Cartographer makes it easy to visualise your data on a map when you have a column in the data that names a place/region. The map data itself is provided by other packages or your own code.</p>
+<p>If you have a list of place/region names (for example as a column in a data frame) and you’d like to turn that into spatial data, <a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a> can help. There are 2 steps:</p>
+<ol style="list-style-type: decimal">
+<li>Register the spatial data with <a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a> using <code><a href="reference/register_map.html">register_map()</a></code>, or load a package that already did that for you.</li>
+<li>Use <code><a href="reference/add_geometry.html">add_geometry()</a></code> to turn your ordinary data frame into a spatial one.</li>
+</ol>
+<p><a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a> complains if it doesn’t recognise any of the place names, and can handle aliases, for example abbreviated state names.</p>
+<p>See <code><a href="articles/cartographer.html">vignette("cartographer")</a></code> for examples, and <code>{ggautomap}</code> for some handy ggplot helpers that pull map data using <a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -87,87 +105,14 @@
 <div class="section level2">
 <h2 id="map-data">Map data<a class="anchor" aria-label="anchor" href="#map-data"></a>
 </h2>
-<p>Packages can register map data with cartographer:</p>
+<p>Some packages provide data that works with <a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a>:</p>
 <ul>
 <li>
-<code>{nswgeo}</code> - map data of New South Wales, Australia.</li>
+<code>{maps}</code> - some dated example maps of the world and several countries.</li>
+<li>
+<code>{nswgeo}</code> - maps of New South Wales, Australia.</li>
 </ul>
-<p>Alternatively, you can either register your own data using <code><a href="reference/register_map.html">register_map()</a></code>.</p>
-</div>
-<div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h2>
-<p>Cartographer comes with one example dataset registered (the map of North Carolina provided by the <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> package where the feature names correspond to counties). If you install the <code>{maps}</code> package, some additional maps are available.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># list registered datasets</span></span>
-<span><span class="fu"><a href="reference/feature_types.html">feature_types</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "maps.italy"  "maps.lakes"  "maps.nz"     "maps.world"  "maps.state" </span></span>
-<span><span class="co">#&gt; [6] "sf.nc"       "maps.france"</span></span>
-<span></span>
-<span><span class="co"># list feature names in one of the datasets</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/feature_names.html">feature_names</a></span><span class="op">(</span><span class="st">"sf.nc"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Ashe"        "Alleghany"   "Surry"       "Currituck"   "Northampton"</span></span>
-<span><span class="co">#&gt; [6] "Hertford"</span></span></code></pre></div>
-<p>Our example dataset has a column called <code>county</code> with the name of the county and a column <code>type</code> that is one of two values. We’d like to draw a map that shows us where the entries are by type.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">nc_type_example_1</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    county type</span></span>
-<span><span class="co">#&gt; 1  BERTIE    B</span></span>
-<span><span class="co">#&gt; 2  BERTIE    A</span></span>
-<span><span class="co">#&gt; 3  BERTIE    A</span></span>
-<span><span class="co">#&gt; 4 PAMLICO    B</span></span>
-<span><span class="co">#&gt; 5  WARREN    B</span></span>
-<span><span class="co">#&gt; 6 PAMLICO    B</span></span></code></pre></div>
-<p>We want to convert our data frame into a spatial data frame, then we’ll be able to use standard <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> tools to draw our map. Cartographer just needs to know which of its maps we’re using (<code>"sf.nc"</code>, although it’s able to guess that if we don’t specify it), and which column has the feature names (<code>county</code>):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">nc_type_example_1</span>, <span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in `resolve_feature_names()`:</span></span>
-<span><span class="co">#&gt; ! location contains unexpected values</span></span>
-<span><span class="co">#&gt; ✖ The unknown values are PAMILCO.</span></span>
-<span><span class="co">#&gt; ℹ Expected sf.nc names like Ashe, Alleghany, and Surry.</span></span>
-<span><span class="co">#&gt; ℹ See feature_names('sf.nc') for the full list.</span></span></code></pre></div>
-<p>What happened? The matching of county names was case-insensitive, so that wasn’t the issue; it looks like our data contained a typo. One of the rows contains <code>"PAMILCO"</code> instead of <code>"PAMLICO"</code> in the <code>county</code> column.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># cleaned dataset</span></span>
-<span><span class="va">nc_type_example_1_fixed</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">nc_type_example_1</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>county <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span><span class="va">county</span>, <span class="st">"PAMILCO"</span> <span class="op">~</span> <span class="st">"PAMLICO"</span>, .default <span class="op">=</span> <span class="va">county</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">nc_type_example_1_fixed</span>, <span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Simple feature collection with 50 features and 2 fields</span></span>
-<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
-<span><span class="co">#&gt; Dimension:     XY</span></span>
-<span><span class="co">#&gt; Bounding box:  xmin: -82.07776 ymin: 34.98222 xmax: -76.50713 ymax: 36.55629</span></span>
-<span><span class="co">#&gt; Geodetic CRS:  NAD27</span></span>
-<span><span class="co">#&gt; First 10 features:</span></span>
-<span><span class="co">#&gt;         county type                       geometry</span></span>
-<span><span class="co">#&gt; 1       BERTIE    B MULTIPOLYGON (((-76.78307 3...</span></span>
-<span><span class="co">#&gt; 2       BERTIE    A MULTIPOLYGON (((-76.78307 3...</span></span>
-<span><span class="co">#&gt; 3       BERTIE    A MULTIPOLYGON (((-76.78307 3...</span></span>
-<span><span class="co">#&gt; 4      PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span></span>
-<span><span class="co">#&gt; 5       WARREN    B MULTIPOLYGON (((-78.30876 3...</span></span>
-<span><span class="co">#&gt; 6      PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span></span>
-<span><span class="co">#&gt; 7  NORTHAMPTON    B MULTIPOLYGON (((-77.21767 3...</span></span>
-<span><span class="co">#&gt; 8      PAMLICO    A MULTIPOLYGON (((-76.94324 3...</span></span>
-<span><span class="co">#&gt; 9      PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span></span>
-<span><span class="co">#&gt; 10     PAMLICO    B MULTIPOLYGON (((-76.94324 3...</span></span></code></pre></div>
-<p>Now that we have our spatial geometry added, we can go ahead and plot it, adding a layer that uses the full <code>"sf.nc"</code> dataset to give us the base map:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">nc_type_example_1_fixed</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">county</span>, <span class="va">type</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/add_geometry.html">add_geometry</a></span><span class="op">(</span><span class="va">county</span>, feature_type <span class="op">=</span> <span class="st">"sf.nc"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="reference/map_sf.html">map_sf</a></span><span class="op">(</span><span class="st">"sf.nc"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">type</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-basic-1.png" width="100%"></p>
-<p>The package <code>{ggautomap}</code> uses cartographer to provide some new geoms that transparently attach the map data and perform some calculations like mapping our data to the middle or random points within the corresponding feature.</p>
+<p>Alternatively, you can register your own data using <code><a href="reference/register_map.html">register_map()</a></code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

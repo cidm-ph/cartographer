@@ -10,10 +10,22 @@
     <loc>https://cidm-ph.github.io/cartographer/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://cidm-ph.github.io/cartographer/articles/cartographer.html</loc>
+  </url>
+  <url>
+    <loc>https://cidm-ph.github.io/cartographer/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://cidm-ph.github.io/cartographer/articles/registering_maps.html</loc>
+  </url>
+  <url>
     <loc>https://cidm-ph.github.io/cartographer/authors.html</loc>
   </url>
   <url>
     <loc>https://cidm-ph.github.io/cartographer/index.html</loc>
+  </url>
+  <url>
+    <loc>https://cidm-ph.github.io/cartographer/news/index.html</loc>
   </url>
   <url>
     <loc>https://cidm-ph.github.io/cartographer/reference/add_geometry.html</loc>
