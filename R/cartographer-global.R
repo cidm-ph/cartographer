@@ -32,12 +32,13 @@ cartographer_global <- new.env(parent = emptyenv())
 #' @export
 #'
 #' @examples
+#'  # register a map of the states of Italy from rnaturalearth using the
+#'  # Italian names, and providing an outline of the country
 #'  register_map(
-#'    "sf.nc2",
-#'    data = function () {
-#'      sf::st_read(system.file("shape/nc.shp", package = "sf"))
-#'    },
-#'    feature_column = "NAME"
+#'    "italy",
+#'    data = rnaturalearth::ne_states(country = "italy", returnclass = "sf"),
+#'    feature_column = "name_it",
+#'    outline = rnaturalearth::ne_countries(country = "italy", returnclass = "sf", scale = "large")
 #'  )
 register_map <- function(feature_type, data, feature_column,
                          aliases = NULL, outline = NULL, lazy = TRUE) {

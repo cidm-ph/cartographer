@@ -41,11 +41,10 @@ appropriate place:
 # in R/zzz.R
 .onLoad <- function(libname, pkgname) {
    cartographer::register_map(
-     "sf.nc2",
-     data = function () {
-       sf::st_read(system.file("shape/nc.shp", package = "sf"))
-     },
-     feature_column = "NAME"
+     "my_package.uk",
+     data = rnaturalearth::ne_states(country = "united kingdom", returnclass = "sf"),
+     feature_column = "name_en",
+     outline = rnaturalearth::ne_countries(country = "united kingdom", returnclass = "sf", scale = "large")
    )
 }
 ```

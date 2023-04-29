@@ -44,4 +44,28 @@
       sf::st_as_sf(maps::map('lakes', plot = FALSE, fill = TRUE))
     },
     feature_column = "ID")
+
+  register_map("rnaturalearth.countries",
+    {
+      if (!requireNamespace("rnaturalearth", quietly = TRUE)) {stop("rnaturalearth.countries requires the 'rnaturalearth' package")}
+      rnaturalearth::ne_countries(returnclass = "sf")
+    },
+    feature_column = "name_en")
+
+  register_map("rnaturalearth.countries_hires",
+    {
+      if (!requireNamespace("rnaturalearth", quietly = TRUE)) {stop("rnaturalearth.countries_hires requires the 'rnaturalearth' package")}
+      if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) {stop("rnaturalearth.countries_hires requires the 'rnaturalearthhires' package")}
+      rnaturalearth::ne_countries(returnclass = "sf", scale = "large")
+    },
+    feature_column = "name_en")
+
+  register_map("rnaturalearth.australia",
+    {
+      if (!requireNamespace("rnaturalearth", quietly = TRUE)) {stop("rnaturalearth.australia requires the 'rnaturalearth' package")}
+      if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) {stop("rnaturalearth.australia requires the 'rnaturalearthhires' package")}
+      rnaturalearth::ne_states(country = "Australia", returnclass = "sf")
+    },
+    outline = rnaturalearth::ne_countries(country = "Australia", scale = "large", returnclass = "sf"),
+    feature_column = "name_en")
 }

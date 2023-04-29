@@ -37,6 +37,7 @@ Suggests:
     ggplot2 (>= 3.4.2),
     knitr,
     maps,
+    rnaturalearth,
     rmarkdown
 URL: https://github.com/cidm-ph/cartographer,
     https://cidm-ph.github.io/cartographer/
