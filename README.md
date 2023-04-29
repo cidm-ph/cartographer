@@ -43,6 +43,8 @@ install.packages('cartographer')
 Some packages provide data that works with `{cartographer}`:
 
 - `{maps}` - some dated example maps of the world and several countries.
+- `{rnaturalearth}` - countries and states (where available).
 - `{nswgeo}` - maps of New South Wales, Australia.
 
-Alternatively, you can register your own data using `register_map()`.
+Alternatively, you can register your own data using `register_map()`
+(see `vignette("registering_maps")`).
