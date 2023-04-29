@@ -47,29 +47,41 @@ register_map <- function(feature_type, data, feature_column,
   if (lazy) {
     delayedAssign(feature_type,
       list(
-        data = validate_map_data(if (is.function(data)) data() else data, feature_column),
+        data = validate_map_data(data, feature_column),
         feature_column = feature_column,
         aliases = aliases,
-        outline = validate_map_data(if (is.function(outline)) outline() else outline)
+        outline = validate_outline_data(outline)
       ),
       assign.env = cartographer_global
     )
   } else {
     cartographer_global[[feature_type]] <- list(
-      data = validate_map_data(if (is.function(data)) data() else data, feature_column),
+      data = validate_map_data(data, feature_column),
       feature_column = feature_column,
       aliases = aliases,
-      outline = validate_map_data(if (is.function(outline)) outline() else outline)
+      outline = validate_outline_data(outline)
     )
   }
 }
 
-validate_map_data <- function(data, feature_column = NULL) {
+validate_map_data <- function(data, feature_column) {
+  if (is.function(data)) data <- data()
+
   if (!inherits(data, "sf")) {
     cli::cli_abort("{.arg data} must be an sf object, not {class(data)}")
   }
-  if (!is.null(feature_column) && !feature_column %in% names(data)) {
-    cli::cli_abort("{.field feature_column} {feature_column} not found")
+  if (!feature_column %in% names(data)) {
+    cli::cli_abort("{.field feature_column} {feature_column} not found in registered data")
+  }
+  invisible(data)
+}
+
+validate_outline_data <- function(data) {
+  if (is.null(data)) return(NULL)
+  if (is.function(data)) data <- data()
+
+  if (!inherits(data, "sf")) {
+    cli::cli_abort("{.arg data} must be an sf object, not {class(data)}")
   }
   invisible(data)
 }
