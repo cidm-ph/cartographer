@@ -19,8 +19,8 @@ the suggested format is \code{"<package name>.<map name>"} to avoid clashes
 between packages.}
 
 \item{data}{A simple feature data frame with the map data, or a function
-that returns a data frame. When \code{lazy} is \code{TRUE}, the function
-will not be called until the data is first accessed.}
+that returns a data frame. When \code{lazy} is \code{TRUE}, the value
+will not be evaluated until the data is first accessed.}
 
 \item{feature_column}{Name of the column of \code{data} that contains the
 feature names.}
@@ -29,10 +29,12 @@ feature names.}
 values that appear in the feature column. This allows abbreviations or
 alternative names to be supported.}
 
-\item{outline}{Optional sf geometry containing just the outline of the map.}
+\item{outline}{Optional sf geometry containing just the outline of the map,
+or a function returning such a geometry. When \code{lazy} is \code{TRUE},
+the value will not be evaluated until the data is first accessed.}
 
-\item{lazy}{When \code{TRUE}, defer evaluation of \code{data} until it is
-used.}
+\item{lazy}{When \code{TRUE}, defer evaluation of \code{data} and
+\code{outline} until it is used.}
 }
 \value{
 No return value; this updates the global feature registry.

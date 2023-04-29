@@ -14,16 +14,18 @@ cartographer_global <- new.env(parent = emptyenv())
 #'   the suggested format is \code{"<package name>.<map name>"} to avoid clashes
 #'   between packages.
 #' @param data A simple feature data frame with the map data, or a function
-#'   that returns a data frame. When \code{lazy} is \code{TRUE}, the function
-#'   will not be called until the data is first accessed.
+#'   that returns a data frame. When \code{lazy} is \code{TRUE}, the value
+#'   will not be evaluated until the data is first accessed.
 #' @param feature_column Name of the column of \code{data} that contains the
 #'   feature names.
 #' @param aliases Optional named character vector or list that maps aliases to
 #'   values that appear in the feature column. This allows abbreviations or
 #'   alternative names to be supported.
-#' @param outline Optional sf geometry containing just the outline of the map.
-#' @param lazy When \code{TRUE}, defer evaluation of \code{data} until it is
-#'   used.
+#' @param outline Optional sf geometry containing just the outline of the map,
+#'   or a function returning such a geometry. When \code{lazy} is \code{TRUE},
+#'   the value will not be evaluated until the data is first accessed.
+#' @param lazy When \code{TRUE}, defer evaluation of \code{data} and
+#'   \code{outline} until it is used.
 #'
 #' @returns No return value; this updates the global feature registry.
 #' @seealso `vignette("registering_maps")`
@@ -44,30 +46,28 @@ register_map <- function(feature_type, data, feature_column,
   if (lazy) {
     delayedAssign(feature_type,
       list(
-        data = validate_map_data(if (is.function(data)) data() else data,
-                                 feature_column),
+        data = validate_map_data(if (is.function(data)) data() else data, feature_column),
         feature_column = feature_column,
         aliases = aliases,
-        outline = outline
+        outline = validate_map_data(if (is.function(outline)) outline() else outline)
       ),
       assign.env = cartographer_global
     )
   } else {
     cartographer_global[[feature_type]] <- list(
-      data = validate_map_data(if (is.function(data)) data() else data,
-                               feature_column),
+      data = validate_map_data(if (is.function(data)) data() else data, feature_column),
       feature_column = feature_column,
       aliases = aliases,
-      outline = outline
+      outline = validate_map_data(if (is.function(outline)) outline() else outline)
     )
   }
 }
 
-validate_map_data <- function(data, feature_column) {
+validate_map_data <- function(data, feature_column = NULL) {
   if (!inherits(data, "sf")) {
     cli::cli_abort("{.arg data} must be an sf object, not {class(data)}")
   }
-  if (!feature_column %in% names(data)) {
+  if (!is.null(feature_column) && !feature_column %in% names(data)) {
     cli::cli_abort("{.field feature_column} {feature_column} not found")
   }
   invisible(data)
