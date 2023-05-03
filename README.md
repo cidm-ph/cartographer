@@ -31,11 +31,11 @@ handy ggplot helpers that pull map data using `{cartographer}`.
 You can install cartographer like so:
 
 ``` r
-options(repos = c(
-  cidmph = 'https://cidm-ph.r-universe.dev',
-  CRAN = 'https://cloud.r-project.org'))
-  
+# CRAN release
 install.packages('cartographer')
+
+# development version
+install.packages('cartographer', repos = c('https://cidm-ph.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Map data
