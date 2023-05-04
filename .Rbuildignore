@@ -7,3 +7,5 @@
 ^pkgdown$
 ^\.github$
 ^data-raw$
+^CRAN-SUBMISSION$
+^cran-comments\.md$
