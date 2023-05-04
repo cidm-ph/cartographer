@@ -86,8 +86,8 @@ between packages.</p></dd>
 
 <dt>data</dt>
 <dd><p>A simple feature data frame with the map data, or a function
-that returns a data frame. When <code>lazy</code> is <code>TRUE</code>, the function
-will not be called until the data is first accessed.</p></dd>
+that returns a data frame. When <code>lazy</code> is <code>TRUE</code>, the value
+will not be evaluated until the data is first accessed.</p></dd>
 
 
 <dt>feature_column</dt>
@@ -102,12 +102,14 @@ alternative names to be supported.</p></dd>
 
 
 <dt>outline</dt>
-<dd><p>Optional sf geometry containing just the outline of the map.</p></dd>
+<dd><p>Optional sf geometry containing just the outline of the map,
+or a function returning such a geometry. When <code>lazy</code> is <code>TRUE</code>,
+the value will not be evaluated until the data is first accessed.</p></dd>
 
 
 <dt>lazy</dt>
-<dd><p>When <code>TRUE</code>, defer evaluation of <code>data</code> until it is
-used.</p></dd>
+<dd><p>When <code>TRUE</code>, defer evaluation of <code>data</code> and
+<code>outline</code> until it is used.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -129,12 +131,13 @@ they are accessed.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="fu">register_map</span><span class="op">(</span></span></span>
-<span class="r-in"><span>   <span class="st">"sf.nc2"</span>,</span></span>
-<span class="r-in"><span>   data <span class="op">=</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>     <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="op">}</span>,</span></span>
-<span class="r-in"><span>   feature_column <span class="op">=</span> <span class="st">"NAME"</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="co"># register a map of the states of Italy from rnaturalearth using the</span></span></span>
+<span class="r-in"><span> <span class="co"># Italian names, and providing an outline of the country</span></span></span>
+<span class="r-in"><span> <span class="fu">register_map</span><span class="op">(</span></span></span>
+<span class="r-in"><span>   <span class="st">"italy"</span>,</span></span>
+<span class="r-in"><span>   data <span class="op">=</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_states.html" class="external-link">ne_states</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"italy"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   feature_column <span class="op">=</span> <span class="st">"name_it"</span>,</span></span>
+<span class="r-in"><span>   outline <span class="op">=</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_countries.html" class="external-link">ne_countries</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"italy"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span>, scale <span class="op">=</span> <span class="st">"large"</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="op">)</span></span></span>
 </code></pre></div>
     </div>

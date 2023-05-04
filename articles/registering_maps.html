@@ -106,11 +106,10 @@ appropriate place:</p>
 <code class="sourceCode R"><span><span class="co"># in R/zzz.R</span></span>
 <span><span class="va">.onLoad</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">libname</span>, <span class="va">pkgname</span><span class="op">)</span> <span class="op">{</span></span>
 <span>   <span class="fu">cartographer</span><span class="fu">::</span><span class="fu"><a href="../reference/register_map.html">register_map</a></span><span class="op">(</span></span>
-<span>     <span class="st">"sf.nc2"</span>,</span>
-<span>     data <span class="op">=</span> <span class="kw">function</span> <span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>       <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
-<span>     <span class="op">}</span>,</span>
-<span>     feature_column <span class="op">=</span> <span class="st">"NAME"</span></span>
+<span>     <span class="st">"my_package.uk"</span>,</span>
+<span>     data <span class="op">=</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_states.html" class="external-link">ne_states</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"united kingdom"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>,</span>
+<span>     feature_column <span class="op">=</span> <span class="st">"name_en"</span>,</span>
+<span>     outline <span class="op">=</span> <span class="fu">rnaturalearth</span><span class="fu">::</span><span class="fu"><a href="https://docs.ropensci.org/rnaturalearth/reference/ne_countries.html" class="external-link">ne_countries</a></span><span class="op">(</span>country <span class="op">=</span> <span class="st">"united kingdom"</span>, returnclass <span class="op">=</span> <span class="st">"sf"</span>, scale <span class="op">=</span> <span class="st">"large"</span><span class="op">)</span></span>
 <span>   <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>The hook needs to come last when your package is evaluated, so the
