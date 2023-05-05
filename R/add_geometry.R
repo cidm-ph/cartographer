@@ -15,8 +15,9 @@
 #' @examples
 #' add_geometry(nc_type_example_2, county)
 add_geometry <- function(x, location, feature_type = NA, geom_name = "geometry") {
-  if (missing(location))
+  if (missing(location)) {
     cli::cli_abort("{.arg location} is absent but must be supplied.")
+  }
 
   location_data <- dplyr::pull(x, {{ location }})
   feature_type <- resolve_feature_type(feature_type, location_data)

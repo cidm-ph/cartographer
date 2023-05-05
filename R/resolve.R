@@ -22,7 +22,9 @@
 #' resolve_feature_type("sf.nc")
 #' resolve_feature_type(NA, feature_names = c("ANSON", "Stanly"))
 resolve_feature_type <- function(feature_type, feature_names) {
-  if (is.null(feature_type)) return(NULL)
+  if (is.null(feature_type)) {
+    return(NULL)
+  }
   if (is.na(feature_type)) feature_type <- guess_feature_type(feature_names)
 
   if (is.null(feature_type) || is.na(feature_type)) {
@@ -69,25 +71,29 @@ resolve_feature_names <- function(feature_names, feature_type,
 
   unmatched <- rlang::arg_match0(unmatched, c("error", "pass"))
   switch(unmatched,
-         error = {
-           unknown_features <- feature_names[is.na(matches)]
-           if (length(unknown_features) > 0) {
-             cli::cli_abort(c(
-               paste0("{.field location} contains unexpected values"),
-               "x" = "The unknown values are {unknown_features}.",
-               "i" = "Expected {feature_type} names like {head(registered_names, n = 3)}.",
-               "i" = "See feature_names('{feature_type}') for the full list."
-             ))
-           }
-           registered_names[matches]
-         },
-         pass = dplyr::if_else(is.na(matches),
-                               feature_names,
-                               registered_names[matches]))
+    error = {
+      unknown_features <- feature_names[is.na(matches)]
+      if (length(unknown_features) > 0) {
+        cli::cli_abort(c(
+          paste0("{.field location} contains unexpected values"),
+          "x" = "The unknown values are {unknown_features}.",
+          "i" = "Expected {feature_type} names like {head(registered_names, n = 3)}.",
+          "i" = "See feature_names('{feature_type}') for the full list."
+        ))
+      }
+      registered_names[matches]
+    },
+    pass = dplyr::if_else(is.na(matches),
+      feature_names,
+      registered_names[matches]
+    )
+  )
 }
 
 match_feature_names <- function(locations, feature_names, aliases) {
-  if (length(locations) == 0) return(integer(0))
+  if (length(locations) == 0) {
+    return(integer(0))
+  }
 
   mapply(
     function(...) {
@@ -98,10 +104,14 @@ match_feature_names <- function(locations, feature_names, aliases) {
     match(locations, feature_names),
     match(aliases[locations], feature_names),
     match(tolower(locations), tolower(feature_names)),
-    match(stats::setNames(aliases, tolower(names(aliases)))[tolower(locations)],
-          feature_names),
-    match(stats::setNames(tolower(aliases), tolower(names(aliases)))[tolower(locations)],
-          tolower(feature_names))
+    match(
+      stats::setNames(aliases, tolower(names(aliases)))[tolower(locations)],
+      feature_names
+    ),
+    match(
+      stats::setNames(tolower(aliases), tolower(names(aliases)))[tolower(locations)],
+      tolower(feature_names)
+    )
   )
 }
 
@@ -150,7 +160,9 @@ guess_feature_type <- function(feature_names) {
     matches <- match_feature_names(feature_names, registered_names, aliases)
 
     # don't look for the best match: just return the first to avoid loading more packages
-    if (any(!is.na(matches))) return(ty)
+    if (any(!is.na(matches))) {
+      return(ty)
+    }
   }
 
   cli::cli_abort(c(

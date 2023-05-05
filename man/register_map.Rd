@@ -50,14 +50,14 @@ useful for larger datasets, so that they are not loaded into memory until
 they are accessed.
 }
 \examples{
- # register a map of the states of Italy from rnaturalearth using the
- # Italian names, and providing an outline of the country
- register_map(
-   "italy",
-   data = rnaturalearth::ne_states(country = "italy", returnclass = "sf"),
-   feature_column = "name_it",
-   outline = rnaturalearth::ne_countries(country = "italy", returnclass = "sf", scale = "large")
- )
+# register a map of the states of Italy from rnaturalearth using the
+# Italian names, and providing an outline of the country
+register_map(
+  "italy",
+  data = rnaturalearth::ne_states(country = "italy", returnclass = "sf"),
+  feature_column = "name_it",
+  outline = rnaturalearth::ne_countries(country = "italy", returnclass = "sf", scale = "large")
+)
 }
 \seealso{
 \code{vignette("registering_maps")}

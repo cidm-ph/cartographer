@@ -32,14 +32,14 @@ cartographer_global <- new.env(parent = emptyenv())
 #' @export
 #'
 #' @examples
-#'  # register a map of the states of Italy from rnaturalearth using the
-#'  # Italian names, and providing an outline of the country
-#'  register_map(
-#'    "italy",
-#'    data = rnaturalearth::ne_states(country = "italy", returnclass = "sf"),
-#'    feature_column = "name_it",
-#'    outline = rnaturalearth::ne_countries(country = "italy", returnclass = "sf", scale = "large")
-#'  )
+#' # register a map of the states of Italy from rnaturalearth using the
+#' # Italian names, and providing an outline of the country
+#' register_map(
+#'   "italy",
+#'   data = rnaturalearth::ne_states(country = "italy", returnclass = "sf"),
+#'   feature_column = "name_it",
+#'   outline = rnaturalearth::ne_countries(country = "italy", returnclass = "sf", scale = "large")
+#' )
 register_map <- function(feature_type, data, feature_column,
                          aliases = NULL, outline = NULL, lazy = TRUE) {
   if (is.null(aliases)) aliases <- character(0)
@@ -77,7 +77,9 @@ validate_map_data <- function(data, feature_column) {
 }
 
 validate_outline_data <- function(data) {
-  if (is.null(data)) return(NULL)
+  if (is.null(data)) {
+    return(NULL)
+  }
   if (is.function(data)) data <- data()
 
   if (!inherits(data, "sf")) {
@@ -177,7 +179,8 @@ map_sfc <- function(feature_names, feature_type) {
   if (any(is.na(matches))) {
     unmatched <- feature_names[is.na(matches)] # nolint: object_usage_linter
     cli::cli_abort(c("Feature names are not all present in the data registered for {feature_type}",
-                     "i" = "These are missing: {head(unmatched, n = 3)}"))
+      "i" = "These are missing: {head(unmatched, n = 3)}"
+    ))
   }
   sf::st_geometry(geoms[matches, ])
 }
