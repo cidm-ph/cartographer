@@ -44,7 +44,9 @@ appropriate place:
      "my_package.uk",
      data = rnaturalearth::ne_states(country = "united kingdom", returnclass = "sf"),
      feature_column = "name_en",
-     outline = rnaturalearth::ne_countries(country = "united kingdom", returnclass = "sf", scale = "large")
+     outline = rnaturalearth::ne_countries(
+       country = "united kingdom", returnclass = "sf", scale = "large"
+     )
    )
 }
 ```

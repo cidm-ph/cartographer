@@ -131,7 +131,10 @@ feature_names <- function(feature_type) {
 }
 
 get_feature_names <- function(feature_type) {
-  if (missing(feature_type) || is.na(feature_type)) cli::cli_abort("Must specify a {.arg feature_type}")
+  if (missing(feature_type) || is.na(feature_type)) {
+    cli::cli_abort("Must specify a {.arg feature_type}")
+  }
+
   cfg <- cartographer_global[[feature_type]]
   if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
   cfg$data[[cfg$feature_column]]
@@ -172,11 +175,11 @@ map_sfc <- function(feature_names, feature_type) {
   matches <- match(feature_names, registered_names)
 
   if (any(is.na(matches))) {
-    unmatched <- feature_names[is.na(matches)]
+    unmatched <- feature_names[is.na(matches)] # nolint: object_usage_linter
     cli::cli_abort(c("Feature names are not all present in the data registered for {feature_type}",
                      "i" = "These are missing: {head(unmatched, n = 3)}"))
   }
-  sf::st_geometry(geoms[matches,])
+  sf::st_geometry(geoms[matches, ])
 }
 
 map_aliases <- function(feature_type) {
