@@ -146,28 +146,47 @@ guess_feature_type <- function(feature_names) {
     return(names(found[which.max(found)]))
   }
 
+  guessed_ty <- NULL
+  errors <- list()
+
   # force loading of maps where this is possible without errors
   for (ty in types[!was_forced]) {
-    registered_names <- rlang::try_fetch(get_feature_names(ty), error = function(cnd) {
-      cli::cli_inform(c(
-        "While guessing {.arg feature_type}, cartographer map '{ty}' was skipped because it could not be loaded",
-        "i" = "Specify {.arg feature_type} explicitly to avoid this message if '{ty}' was not the map you intended",
-        "i" = "{cnd}"
-      ))
-    })
-    if (is.null(registered_names)) next
+    registered_names <- tryCatch(get_feature_names(ty), error = function(cnd) cnd)
+    if (rlang::is_error(registered_names)) {
+      errors[[ty]] <- registered_names$message
+      next
+    }
+
     aliases <- map_aliases(ty)
     matches <- match_feature_names(feature_names, registered_names, aliases)
 
     # don't look for the best match: just return the first to avoid loading more packages
     if (any(!is.na(matches))) {
-      return(ty)
+      guessed_ty <- ty
+      break
     }
   }
 
-  cli::cli_abort(c(
-    "Unable to guess {.arg feature_type} from the data",
-    "x" = "These features are not in any registered map: {head(feature_names, n = 3)}",
-    "i" = "Register a new map or double check the correct data has been used"
-  ))
+  if (length(errors) > 0) {
+    details <- paste0("{.field ", names(errors), "}: ", unname(errors))
+    cli::cli_inform(c(
+      "While guessing {.arg feature_type}, cartographer skipped {length(errors)} maps that could not be loaded",
+      setNames(details, rep("*", length(errors))),
+      "i" = "Specify {.arg feature_type} explicitly to avoid this message"
+    ))
+  }
+
+  if (is.null(guessed_ty)) {
+    cli::cli_abort(c(
+      "Cartographer was unable to guess {.arg feature_type} from the data",
+      "x" = "These features are not in any registered map: {head(feature_names, n = 3)}",
+      "i" = "Register a new map or double check the correct data has been used"
+    ))
+  } else {
+    cli::cli_inform(c(
+      "Cartographer guessed {.arg feature_type} to be '{ty}'",
+      "i" = "Specify {.arg feature_type} explicitly to avoid this message"
+    ))
+    ty
+  }
 }
