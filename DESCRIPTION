@@ -38,6 +38,7 @@ Suggests:
     knitr,
     maps,
     rnaturalearth,
+    rnaturalearthhires,
     rmarkdown
 URL: https://github.com/cidm-ph/cartographer,
     https://cidm-ph.github.io/cartographer/
