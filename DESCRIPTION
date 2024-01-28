@@ -30,7 +30,7 @@ Collate:
     'data.R'
     'resolve.R'
     'zzz.R'
-Remotes: ropensci/rnaturalearthhires
+Additional_repositories: http://packages.ropensci.org
 Depends: 
     R (>= 4.1)
 LazyData: true
