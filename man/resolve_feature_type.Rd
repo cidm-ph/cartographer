@@ -25,8 +25,21 @@ as \code{feature_names} with the names of all registered map datasets. If there
 is an unambiguous match, that will be filled in.
 }
 \details{
-Note that this requires that any lazily-loaded datasets are loaded, so there
-is a penalty to pay for the convenience.
+Cartographer lazy loads map data for registered maps. In order to compare
+the example \code{feature_names} with registered maps, it might be necessary
+to force some of these datasets to load. To minimise the impact, any maps
+that have already been loaded are checked first. Other maps are then
+loaded one at a time until any matches are found. Consequently, the result
+returned by this function is not deterministic.
+
+In the worst case where none of the registered maps matches, all of them
+will be loaded. This might take several seconds and occupy some memory,
+depending on which maps are registered. If a match is found, however, it
+will be found quickly on subsequent calls since the data will have
+already been loaded.
+
+The best way to avoid these issues is to explicitly specify the
+\code{feature_type}.
 }
 \examples{
 resolve_feature_type("sf.nc")

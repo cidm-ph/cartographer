@@ -18,24 +18,37 @@ knitr::opts_chunk$set(
 library(cartographer)
 ```
 
-
 If you are often working with spatial data concerning a specific region, it might
 make sense to bundle up the map data along with its registration as an R package.
 This is true even if the data is only for internal use.
 
-For a general introduction to R packaging, see [the R packaging book](https://r-pkgs.org/).
-The [chapter on packaging data](https://r-pkgs.org/data.html) in particular contains many
-relevant hints.
+To get started, you can use `usethis::create_package()` to generate the files you need
+for a new package.
 
+## Obtaining the data
+Start by calling `usethis::use_data_raw("my_map_name")` to create an R script where you can
+prepare your data. This helps you remember what you did in case you need to revisit the
+dataset later.
 
-## General guidelines
-Your source dataset needs to be transformed into a `{sf}` data frame. The `sf::read_sf()`
-can ingest many popular spatial data formats
-Make use of `usethis::use_data_raw()` and `usethis::use_data()` to prepare the data.
+You'll need to download the map data that you'll be using. There might be shapefiles
+published by a local jurisdiction, or you could look to packages like `{rnaturalearth}`
+that can provide general-purpose map data. Either way, you want to end up with an `{sf}`
+data frame. `sf::read_sf()` can read many common map data formats, and `sf::st_as_sf()`
+can convert other types of spatial data (including a data frame with latitude and
+longitude columns) into the right format.
 
+Once you have the data ready, call `usethis::use_data("my_map_name")` to add it to your
+package.
+
+## Registering the map
 Your package will need to inform `{cartographer}` of the data by calling `register_map()`.
 This needs to happen after your package is loaded, so the `base::.onLoad()` hook is the
-appropriate place:
+appropriate place. This is often placed in a file named `"zzz.R"` so that it comes last
+alphabetically, but this is not a requirement. Use `usethis::use_r("zzz")` to create the
+file in your package.
+
+This example registers a map that is returned by `{rnaturalearth}` without any additional
+processing as described above:
 
 ```{r}
 # in R/zzz.R
@@ -51,15 +64,25 @@ appropriate place:
 }
 ```
 
-The hook needs to come last when your package is evaluated, so the convention is
-to include it in a file called `R/zzz.R`, which is normally alphabetically last.
 The registration should at least include the map data and the name of the column that
 labels the features. It can also contain an alias mapping if there are alternative
 names or abbreviations for places that would plausibly appear in datasets.
 
+## Publishing your package
+At this point, you could install your package with `devtools::install()` and use it in
+other scripts on your machine.
+
+If you want to publish your package, you'll need to do some extra work to clean it up.
+For a general introduction to R packaging, see [the R packaging book](https://r-pkgs.org/).
+The [chapter on packaging data](https://r-pkgs.org/data.html) in particular contains many
+relevant hints. You'll need to be careful that any data you're using is licensed in a way
+that lets you share it, and that you properly acknowledge the copyright holder.
+
+See `{nswgeo}` for an example of a package that bundles some map data and relevant helpers,
+registering the maps with `{cartographer}`.
 
 ## Reducing file size
-Spatial datasets can often be quite large as they contain high resolution data.
+Spatial datasets can often be quite large if they contain high resolution data.
 This can especially be a problem if attempting to commit the data to git or publish
 your package to CRAN (where 1 MB is the soft limit for the total compressed size of
 packages).

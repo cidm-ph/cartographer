@@ -28,9 +28,10 @@ you'd like to turn that into spatial data, `{cartographer}` can help. There are 
   1. Register the spatial data with `{cartographer}` using `register_map()`, or load a
      package that already did that for you.
   2. Use `add_geometry()` to turn your ordinary data frame into a spatial one.
-
-`{cartographer}` complains if it doesn't recognise any of the place names, and can handle
-aliases, for example abbreviated state names.
+  
+Cartographer will be most useful when you are working regularly with data about the same
+places. You can do the work once to curate your geospatial data, and thereafter you can
+use cartographer to quickly jump from place names to map data ready to analyse or visualise.
 
 See `vignette("cartographer")` for examples, and `{ggautomap}` for some handy ggplot
 helpers that pull map data using `{cartographer}`.
