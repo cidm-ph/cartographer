@@ -96,8 +96,19 @@ be a subset of the values.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that this requires that any lazily-loaded datasets are loaded, so there
-is a penalty to pay for the convenience.</p>
+    <p>Cartographer lazy loads map data for registered maps. In order to compare
+the example <code>feature_names</code> with registered maps, it might be necessary
+to force some of these datasets to load. To minimise the impact, any maps
+that have already been loaded are checked first. Other maps are then
+loaded one at a time until any matches are found. Consequently, the result
+returned by this function is not deterministic.</p>
+<p>In the worst case where none of the registered maps matches, all of them
+will be loaded. This might take several seconds and occupy some memory,
+depending on which maps are registered. If a match is found, however, it
+will be found quickly on subsequent calls since the data will have
+already been loaded.</p>
+<p>The best way to avoid these issues is to explicitly specify the
+<code>feature_type</code>.</p>
     </div>
 
     <div class="section level2">

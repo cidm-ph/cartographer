@@ -89,19 +89,39 @@
 region, it might make sense to bundle up the map data along with its
 registration as an R package. This is true even if the data is only for
 internal use.</p>
-<p>For a general introduction to R packaging, see <a href="https://r-pkgs.org/" class="external-link">the R packaging book</a>. The <a href="https://r-pkgs.org/data.html" class="external-link">chapter on packaging data</a> in
-particular contains many relevant hints.</p>
+<p>To get started, you can use <code>usethis::create_package()</code> to
+generate the files you need for a new package.</p>
 <div class="section level2">
-<h2 id="general-guidelines">General guidelines<a class="anchor" aria-label="anchor" href="#general-guidelines"></a>
+<h2 id="obtaining-the-data">Obtaining the data<a class="anchor" aria-label="anchor" href="#obtaining-the-data"></a>
 </h2>
-<p>Your source dataset needs to be transformed into a <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a>
-data frame. The <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code> can ingest many popular
-spatial data formats Make use of <code>usethis::use_data_raw()</code>
-and <code>usethis::use_data()</code> to prepare the data.</p>
+<p>Start by calling <code>usethis::use_data_raw("my_map_name")</code> to
+create an R script where you can prepare your data. This helps you
+remember what you did in case you need to revisit the dataset later.</p>
+<p>You’ll need to download the map data that you’ll be using. There
+might be shapefiles published by a local jurisdiction, or you could look
+to packages like <a href="https://docs.ropensci.org/rnaturalearth/" class="external-link">rnaturalearth</a> that can provide
+general-purpose map data. Either way, you want to end up with an
+<a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> data frame. <code><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">sf::read_sf()</a></code> can read many
+common map data formats, and <code><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">sf::st_as_sf()</a></code> can convert
+other types of spatial data (including a data frame with latitude and
+longitude columns) into the right format.</p>
+<p>Once you have the data ready, call
+<code>usethis::use_data("my_map_name")</code> to add it to your
+package.</p>
+</div>
+<div class="section level2">
+<h2 id="registering-the-map">Registering the map<a class="anchor" aria-label="anchor" href="#registering-the-map"></a>
+</h2>
 <p>Your package will need to inform <a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a> of the
 data by calling <code><a href="../reference/register_map.html">register_map()</a></code>. This needs to happen after
 your package is loaded, so the <code><a href="https://rdrr.io/r/base/ns-hooks.html" class="external-link">base::.onLoad()</a></code> hook is the
-appropriate place:</p>
+appropriate place. This is often placed in a file named
+<code>"zzz.R"</code> so that it comes last alphabetically, but this is
+not a requirement. Use <code>usethis::use_r("zzz")</code> to create the
+file in your package.</p>
+<p>This example registers a map that is returned by
+<a href="https://docs.ropensci.org/rnaturalearth/" class="external-link">rnaturalearth</a> without any additional processing as
+described above:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># in R/zzz.R</span></span>
 <span><span class="va">.onLoad</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">libname</span>, <span class="va">pkgname</span><span class="op">)</span> <span class="op">{</span></span>
@@ -114,18 +134,30 @@ appropriate place:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>The hook needs to come last when your package is evaluated, so the
-convention is to include it in a file called <code>R/zzz.R</code>, which
-is normally alphabetically last. The registration should at least
-include the map data and the name of the column that labels the
-features. It can also contain an alias mapping if there are alternative
-names or abbreviations for places that would plausibly appear in
-datasets.</p>
+<p>The registration should at least include the map data and the name of
+the column that labels the features. It can also contain an alias
+mapping if there are alternative names or abbreviations for places that
+would plausibly appear in datasets.</p>
+</div>
+<div class="section level2">
+<h2 id="publishing-your-package">Publishing your package<a class="anchor" aria-label="anchor" href="#publishing-your-package"></a>
+</h2>
+<p>At this point, you could install your package with
+<code>devtools::install()</code> and use it in other scripts on your
+machine.</p>
+<p>If you want to publish your package, you’ll need to do some extra
+work to clean it up. For a general introduction to R packaging, see <a href="https://r-pkgs.org/" class="external-link">the R packaging book</a>. The <a href="https://r-pkgs.org/data.html" class="external-link">chapter on packaging data</a> in
+particular contains many relevant hints. You’ll need to be careful that
+any data you’re using is licensed in a way that lets you share it, and
+that you properly acknowledge the copyright holder.</p>
+<p>See <a href="https://github.com/cidm-ph/nswgeo" class="external-link">nswgeo</a> for an example of a package that bundles
+some map data and relevant helpers, registering the maps with
+<a href="https://github.com/cidm-ph/cartographer" class="external-link">cartographer</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="reducing-file-size">Reducing file size<a class="anchor" aria-label="anchor" href="#reducing-file-size"></a>
 </h2>
-<p>Spatial datasets can often be quite large as they contain high
+<p>Spatial datasets can often be quite large if they contain high
 resolution data. This can especially be a problem if attempting to
 commit the data to git or publish your package to CRAN (where 1 MB is
 the soft limit for the total compressed size of packages).</p>
