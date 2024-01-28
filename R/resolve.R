@@ -171,7 +171,7 @@ guess_feature_type <- function(feature_names) {
     details <- paste0("{.field ", names(errors), "}: ", unname(errors))
     cli::cli_inform(c(
       "While guessing {.arg feature_type}, cartographer skipped {length(errors)} maps that could not be loaded",
-      setNames(details, rep("*", length(errors))),
+      stats::setNames(details, rep("*", length(errors))),
       "i" = "Specify {.arg feature_type} explicitly to avoid this message"
     ))
   }
