@@ -79,6 +79,9 @@
       if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
         stop("rnaturalearth.countries_hires requires the 'rnaturalearth' package")
       }
+      if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) {
+        stop("rnaturalearth.countries_hires requires the 'rnaturalearthhires' package")
+      }
       rnaturalearth::ne_countries(returnclass = "sf", scale = "large")
     },
     feature_column = "name_en"
@@ -88,6 +91,9 @@
     data = {
       if (!requireNamespace("rnaturalearth", quietly = TRUE)) {
         stop("rnaturalearth.australia requires the 'rnaturalearth' package")
+      }
+      if (!requireNamespace("rnaturalearthhires", quietly = TRUE)) {
+        stop("rnaturalearth.australia requires the 'rnaturalearthhires' package")
       }
       rnaturalearth::ne_states(country = "Australia", returnclass = "sf")
     },
