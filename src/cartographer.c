@@ -3,31 +3,21 @@
 #include <R_ext/Visibility.h>
 #include "cartographer.h"
 
-SEXP nameEnv(SEXP name, SEXP env) {
-  if(!isSymbol(name) || length(name) != 1)
-    error("name is not a single symbol");
-  if(!isEnvironment(env))
-    error("env should be an environment");
-
-  return findVar(name, env);
-}
-
-SEXP is_promise(SEXP name, SEXP env) {
-  SEXP result = PROTECT(allocVector(LGLSXP, 1));
-  LOGICAL(result)[0] = TYPEOF(nameEnv(name, env)) == PROMSXP;
-  UNPROTECT(1);
-  return result;
-}
-
 SEXP promise_was_forced(SEXP name, SEXP env) {
+  if (!Rf_isString(name) || Rf_length(name) != 1)
+      Rf_error("name is not a single string");
+  if (!Rf_isEnvironment(env))
+      Rf_error("env should be an environment");
+  SEXP val;
+  val = Rf_findVar(Rf_installChar(STRING_ELT(name, 0)), env);
+
   SEXP result = PROTECT(allocVector(LGLSXP, 1));
-  LOGICAL(result)[0] = PRVALUE(nameEnv(name, env)) != R_UnboundValue;
+  LOGICAL(result)[0] = PRVALUE(val) != R_UnboundValue;
   UNPROTECT(1);
   return result;
 }
 
 static const R_CallMethodDef callMethods[] = {
-  {"is_promise", (DL_FUNC) &is_promise, 2},
   {"promise_was_forced", (DL_FUNC) &promise_was_forced, 2},
   {NULL, NULL, 0}
 };

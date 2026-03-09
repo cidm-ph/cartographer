@@ -29,6 +29,7 @@ Collate:
     'cartographer-package.R'
     'add_geometry.R'
     'data.R'
+    'promise.R'
     'resolve.R'
     'zzz.R'
 Additional_repositories: http://packages.ropensci.org
@@ -41,8 +42,10 @@ Suggests:
     maps,
     rnaturalearth,
     rnaturalearthhires,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 URL: https://github.com/cidm-ph/cartographer,
     https://cidm-ph.github.io/cartographer/
 BugReports: https://github.com/cidm-ph/cartographer/issues
 VignetteBuilder: knitr
+Config/testthat/edition: 3
