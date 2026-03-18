@@ -29,7 +29,6 @@ Collate:
     'cartographer-package.R'
     'add_geometry.R'
     'data.R'
-    'promise.R'
     'resolve.R'
     'zzz.R'
 Additional_repositories: http://packages.ropensci.org

@@ -1,5 +1,7 @@
 # cartographer (development version)
 
+* Use rlang instead of provate C API to test for promise status.
+
 # cartographer 0.2.1
 
 * When guessing feature type, group any error messages together and explain why they are appearing.

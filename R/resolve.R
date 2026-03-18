@@ -128,6 +128,10 @@ match_feature_names <- function(locations, feature_names, aliases) {
   )
 }
 
+promise_was_forced <- function(name, env = cartographer_global) {
+  !rlang::env_binding_are_lazy(env, name)
+}
+
 guess_feature_type <- function(feature_names) {
   feature_names <- unique(feature_names)
   if (length(feature_names) == 0) {

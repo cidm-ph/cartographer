@@ -9,6 +9,3 @@
 #'
 #' @docType package
 "_PACKAGE"
-
-#' @useDynLib cartographer, .registration = TRUE, .fixes = "C_"
-NULL
