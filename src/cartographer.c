@@ -1,6 +1,7 @@
 #include <R.h>
 #include <R_ext/Rdynload.h>
 #include <R_ext/Visibility.h>
+#include "Rversion.h"
 #include "cartographer.h"
 
 SEXP promise_was_forced(SEXP name, SEXP env) {
@@ -9,7 +10,12 @@ SEXP promise_was_forced(SEXP name, SEXP env) {
   if (!Rf_isEnvironment(env))
       Rf_error("env should be an environment");
   SEXP val;
+
+  #if R_VERSION < R_Version(4, 5, 0)
   val = Rf_findVar(Rf_installChar(STRING_ELT(name, 0)), env);
+  #else
+  val = R_getVar(Rf_installChar(STRING_ELT(name, 0)), env, TRUE);
+  #endif
 
   SEXP result = PROTECT(allocVector(LGLSXP, 1));
   LOGICAL(result)[0] = PRVALUE(val) != R_UnboundValue;
