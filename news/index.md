@@ -2,6 +2,8 @@
 
 ## cartographer (development version)
 
+- Use rlang instead of provate C API to test for promise status.
+
 ## cartographer 0.2.1
 
 CRAN release: 2024-01-28
