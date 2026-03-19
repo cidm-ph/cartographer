@@ -15,12 +15,12 @@ Source:
 [`DESCRIPTION`](https://github.com/cidm-ph/cartographer/blob/main/DESCRIPTION)
 
 Suster C (2026). *cartographer: Turn Place Names into Map Data*. R
-package version 0.2.2, <https://github.com/cidm-ph/cartographer>.
+package version 0.2.2.9000, <https://github.com/cidm-ph/cartographer>.
 
     @Manual{,
       title = {cartographer: Turn Place Names into Map Data},
       author = {Carl Suster},
       year = {2026},
-      note = {R package version 0.2.2},
+      note = {R package version 0.2.2.9000},
       url = {https://github.com/cidm-ph/cartographer},
     }

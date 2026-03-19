@@ -1,5 +1,7 @@
 # Changelog
 
+## cartographer (development version)
+
 ## cartographer 0.2.2
 
 CRAN release: 2026-03-19
