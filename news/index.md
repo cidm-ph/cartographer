@@ -1,6 +1,8 @@
 # Changelog
 
-## cartographer (development version)
+## cartographer 0.2.2
+
+CRAN release: 2026-03-19
 
 - Use rlang instead of private C API to test for promise status. The
   package no longer requires compilation.
