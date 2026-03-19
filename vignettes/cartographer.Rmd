@@ -55,7 +55,7 @@ library(dplyr, warn.conflicts = FALSE)
 # cleaned dataset
 nc_type_example_1_fixed <-
   nc_type_example_1 |>
-  mutate(county = case_match(county, "PAMILCO" ~ "PAMLICO", .default = county))
+  mutate(county = replace_values(county, "PAMILCO" ~ "PAMLICO"))
 
 add_geometry(nc_type_example_1_fixed, county, feature_type = "sf.nc")
 ```

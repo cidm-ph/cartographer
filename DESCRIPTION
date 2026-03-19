@@ -21,7 +21,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports:
     cli (>= 3.6.0),
-    dplyr (>= 1.1.0),
     rlang (>= 1.1.0),
     sf (>= 1.0.12)
 Collate:
@@ -36,6 +35,7 @@ Depends:
     R (>= 4.1)
 LazyData: true
 Suggests:
+    dplyr (>= 1.2.0),
     ggplot2 (>= 3.4.2),
     knitr,
     maps,
