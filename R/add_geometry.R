@@ -39,5 +39,6 @@ add_geometry <- function(
 get_geometry <- function(locations, feature_type) {
   location_data <- resolve_feature_names(locations, feature_type)
   matches <- match(location_data, get_feature_names(feature_type))
-  sf::st_geometry(map_sf(feature_type))[matches]
+  geoms <- map_sf(feature_type)
+  sf::st_geometry(geoms[matches, ])
 }

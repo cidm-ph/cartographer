@@ -2,6 +2,7 @@ test_that("retrieves geometry column", {
   locations <- nc_type_example_2$county[1:30]
   geom <- get_geometry(locations, feature_type = "sf.nc")
   expect_length(geom, 30L)
+  expect_s3_class(geom, "sfc")
 })
 
 test_that("add_geometry supports tidy evaluation", {

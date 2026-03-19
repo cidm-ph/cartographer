@@ -1,6 +1,6 @@
 # cartographer (development version)
 
-* Use rlang instead of private C API to test for promise status.
+* Use rlang instead of private C API to test for promise status. The package no longer requires compilation.
 * dplyr is no longer a direct dependency.
 
 # cartographer 0.2.1
