@@ -64,13 +64,7 @@ library(dplyr, warn.conflicts = FALSE)
 # cleaned dataset
 nc_type_example_1_fixed <-
   nc_type_example_1 |>
-  mutate(county = case_match(county, "PAMILCO" ~ "PAMLICO", .default = county))
-#> Warning: There was 1 warning in `mutate()`.
-#> ℹ In argument: `county = case_match(county, "PAMILCO" ~ "PAMLICO", .default =
-#>   county)`.
-#> Caused by warning:
-#> ! `case_match()` was deprecated in dplyr 1.2.0.
-#> ℹ Please use `recode_values()` instead.
+  mutate(county = replace_values(county, "PAMILCO" ~ "PAMLICO"))
 
 add_geometry(nc_type_example_1_fixed, county, feature_type = "sf.nc")
 #> Simple feature collection with 50 features and 2 fields
