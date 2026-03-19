@@ -146,7 +146,9 @@ get_feature_names <- function(feature_type) {
 #' map_sf("sf.nc")
 map_sf <- function(feature_type) {
   cfg <- cartographer_global[[feature_type]]
-  if (is.null(cfg)) cli::cli_abort("Unknown feature type {feature_type}")
+  if (is.null(cfg)) {
+    cli::cli_abort("Unknown feature type {.str {feature_type}}")
+  }
   cfg$data
 }
 
