@@ -14,17 +14,30 @@
 #'
 #' @examples
 #' add_geometry(nc_type_example_2, county, feature_type = "sf.nc")
-add_geometry <- function(x, location, feature_type = NA, geom_name = "geometry") {
+add_geometry <- function(
+  x,
+  location,
+  feature_type = NA,
+  geom_name = "geometry"
+) {
   if (missing(location)) {
     cli::cli_abort("{.arg location} is absent but must be supplied.")
   }
 
-  location_data <- dplyr::pull(x, {{ location }})
-  feature_type <- resolve_feature_type(feature_type, location_data)
-  location_data <- resolve_feature_names(location_data, feature_type)
+  locations <- rlang::eval_tidy(
+    rlang::enquo(location),
+    data = x,
+    env = rlang::caller_env()
+  )
+  feature_type <- resolve_feature_type(feature_type, locations)
 
-  matches <- match(location_data, get_feature_names(feature_type))
-  geometry <- sf::st_geometry(map_sf(feature_type))
-  x <- dplyr::mutate(x, {{ geom_name }} := geometry[matches])
+  geometry <- get_geometry(locations = locations, feature_type = feature_type)
+  x[[geom_name]] <- geometry
   sf::st_sf(x, sf_column_name = geom_name)
+}
+
+get_geometry <- function(locations, feature_type) {
+  location_data <- resolve_feature_names(locations, feature_type)
+  matches <- match(location_data, get_feature_names(feature_type))
+  sf::st_geometry(map_sf(feature_type))[matches]
 }

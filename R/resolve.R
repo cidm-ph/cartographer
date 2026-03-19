@@ -83,7 +83,8 @@ resolve_feature_names <- function(feature_names, feature_type,
   matches <- match_feature_names(feature_names, registered_names, aliases)
 
   unmatched <- rlang::arg_match0(unmatched, c("error", "pass"))
-  switch(unmatched,
+  switch(
+    unmatched,
     error = {
       unknown_features <- feature_names[is.na(matches)]
       if (length(unknown_features) > 0) {
@@ -96,10 +97,7 @@ resolve_feature_names <- function(feature_names, feature_type,
       }
       registered_names[matches]
     },
-    pass = dplyr::if_else(is.na(matches),
-      feature_names,
-      registered_names[matches]
-    )
+    pass = ifelse(is.na(matches), feature_names, registered_names[matches])
   )
 }
 
